@@ -10,7 +10,7 @@ Abra `index.html` em um navegador ou sirva a pasta localmente:
 python -m http.server 8765
 ```
 
-Depois visite `http://localhost:8765/` e use “Ver todos” para abrir `produtos.html`. O Bootstrap é referenciado pelo CDN; os arquivos oficiais em `vendor/bootstrap/` servem como fallback para ambientes que bloqueiam o CDN. Os caminhos relativos funcionam também quando a pasta é publicada no GitHub Pages.
+Depois visite `http://localhost:8765/` e use “Ver todos” para abrir `produtos.html`. O Bootstrap é referenciado pelo CDN; os arquivos em `vendor/bootstrap/` servem como fallback para ambientes que bloqueiam o CDN. Os caminhos relativos também funcionam no site publicado na Vercel.
 
 ## Estrutura
 
@@ -24,7 +24,7 @@ Depois visite `http://localhost:8765/` e use “Ver todos” para abrir `produto
 
 ## Contatos e configuração
 
-Os contatos oficiais ficam no início de `js/main.js`, em `STORE_CONFIG`:
+Os destinos usados nesta demonstração ficam no início de `js/main.js`, em `STORE_CONFIG`:
 
 ```js
 const STORE_CONFIG = Object.freeze({
@@ -34,7 +34,7 @@ const STORE_CONFIG = Object.freeze({
 });
 ```
 
-Os ícones sociais, o header e o footer abrem os contatos oficiais em nova aba. Os cards e o bloco de atacado preparam mensagens no WhatsApp; o formulário inclui os campos preenchidos. A pessoa ainda precisa confirmar o envio no aplicativo. O botão de rotas usa o endereço incluído no mapa fornecido.
+**O WhatsApp 5575999312633 é um contato de demonstração deste projeto acadêmico, não o contato oficial da loja.** Os links de WhatsApp do header, footer, cards e bloco de atacado usam esse número. O formulário prepara uma mensagem com os campos preenchidos; a pessoa ainda precisa confirmar o envio no aplicativo. O botão de rotas usa o endereço incluído no mapa fornecido.
 
 A Home e o catálogo montam os cards a partir de `PRODUCTS`, em `js/main.js`. Cada versão guarda imagem, descrição, cores da amostra e mensagem própria de WhatsApp. Os círculos sob o nome mostram as cores disponíveis nas fotos; conjuntos de duas cores usam uma amostra dividida. A Home mostra os quatro primeiros modelos; o catálogo mostra os seis. A foto e o nome de cada card abrem a página individual com a cor selecionada; “CONSULTAR” continua a abrir o WhatsApp diretamente. Para acrescentar ou corrigir uma versão, edite somente essa lista.
 
@@ -44,6 +44,11 @@ O mapa incorporado usa o iframe fornecido pela loja. Seu `src` permanece no `ind
 
 A galeria do Instagram foi deixada para uma etapa posterior. Nas artes mobile dos banners 01 e 03, a chamada para Produtos aparece dentro da área do banner e leva à vitrine da Home.
 
-## Orientação do TDE
+## Entrega do TDE
 
-O PDF do TDE também descreve versionamento em Git/GitHub e publicação em GitHub Pages ou Vercel para a entrega final. Esta pasta contém a implementação da Home e do catálogo; o repositório, os commits e a hospedagem devem ser preparados pelo grupo quando os dados da loja estiverem confirmados.
+- GitHub: [emersonbrandao058-dot/JJStyle](https://github.com/emersonbrandao058-dot/JJStyle)
+- Site publicado: [jj-style.vercel.app](https://jj-style.vercel.app/)
+- Design: [Figma da Home](https://www.figma.com/design/SEKixVXDTfooARsFs5MlaC)
+- Páginas: `index.html`, `produtos.html` e `produto.html`.
+
+O histórico Git registra pelo menos duas versões identificáveis: `7d83f44` (Versão 1 — Home e catálogo responsivos) e `5de55f5` (Versão 2 — página individual de produtos).
