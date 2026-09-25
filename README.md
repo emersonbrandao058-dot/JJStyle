@@ -28,7 +28,7 @@ Os contatos oficiais ficam no início de `js/main.js`, em `STORE_CONFIG`:
 
 ```js
 const STORE_CONFIG = Object.freeze({
-  whatsappNumber: '5575988215508', // DDI e DDD, somente dígitos
+  whatsappNumber: '5575999312633', // DDI e DDD, somente dígitos
   instagramUrl: 'https://www.instagram.com/jjstylle_/',
   address: 'R. Comendador Gomes, 483 - Parque Panorama, Feira de Santana - BA, 44091-238' // Endereço do mapa fornecido
 });
