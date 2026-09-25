@@ -173,10 +173,10 @@ section[id] {
   height: 12%;
 }
 .hero-cta-two {
-  left: 9.8%;
-  top: 65%;
-  width: 16%;
-  height: 11%;
+  left: 10.5%;
+  top: 71%;
+  width: 16.5%;
+  height: 9.5%;
 }
 .hero-cta-three {
   left: 5.6%;
@@ -186,6 +186,11 @@ section[id] {
 }
 .carousel-item:nth-child(2) .hero-art {
   object-position: left center;
+}
+@media (min-width: 768px) {
+  .carousel-item:nth-child(2) .hero-art {
+    object-position: center center;
+  }
 }
 .hero-control {
   opacity: 1;
@@ -1499,13 +1504,21 @@ section[id] {
   }
 }
 
+@media (min-width: 768px) and (max-width: 990px) {
+  .carousel-item:nth-child(2) .hero-art {
+    object-fit: contain;
+  }
+  .hero-cta-two {
+    left: 10.1%;
+    top: calc(50% + 5.85vw);
+    width: 16.1%;
+    height: 2.9vw;
+  }
+}
+
 @media (min-width: 768px) and (max-width: 1100px) {
   .hero-cta-one, .hero-cta-three {
     top: 68%;
     height: 20%;
-  }
-  .hero-cta-two {
-    left: 12%;
-    width: 21%;
   }
 }
