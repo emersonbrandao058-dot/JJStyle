@@ -1,6 +1,6 @@
 // Número com DDI e DDD; mensagens são montadas antes de abrir o WhatsApp.
 const STORE_CONFIG = Object.freeze({
-  whatsappNumber: '5575988215508',
+  whatsappNumber: '5575999312633',
   instagramUrl: 'https://www.instagram.com/jjstylle_/',
   address: 'R. Comendador Gomes, 483 - Parque Panorama, Feira de Santana - BA, 44091-238'
 });
