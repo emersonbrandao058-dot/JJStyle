@@ -4,8 +4,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#090b0f">
-    <meta name="description" content="Produtos de moda masculina da JJ Style. Consulte preços pelo WhatsApp.">
-    <title>Produtos | JJ Style</title>
+    <meta name="description" content="Detalhes dos conjuntos da JJ Style. Consulte pelo WhatsApp.">
+    <title>Produto | JJ Style</title>
     <link rel="icon" href="images/branding/favicon.png" type="image/png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -35,7 +35,7 @@
           <div class="collapse navbar-collapse" id="menu-principal">
             <ul class="navbar-nav nav-links">
               <li class="nav-item"><a class="nav-link" href="index.html#inicio">Início</a></li>
-              <li class="nav-item"><a class="nav-link" href="produtos.html" aria-current="page">Produtos</a></li>
+              <li class="nav-item"><a class="nav-link" href="produtos.html">Produtos</a></li>
               <li class="nav-item"><a class="nav-link" href="index.html#sobre">Sobre</a></li>
             </ul>
             <a class="btn nav-contact" id="header-whatsapp" href="index.html#contato">Fale conosco <span aria-hidden="true">↗</span></a>
@@ -45,18 +45,39 @@
     </header>
 
     <main id="conteudo">
-      <section class="catalog-section" id="produtos" aria-labelledby="catalogo-titulo">
+      <section class="detail-section" aria-label="Produto JJ Style">
         <div class="container-wide">
-          <div class="catalog-heading">
-            <nav class="catalog-breadcrumb" aria-label="Caminho de navegação">
+          <div id="product-detail" hidden>
+            <nav class="catalog-breadcrumb detail-breadcrumb" aria-label="Caminho de navegação">
               <a href="index.html#inicio">Início</a>
               <span aria-hidden="true">/</span>
-              <span aria-current="page">Produtos</span>
+              <a href="produtos.html">Produtos</a>
+              <span aria-hidden="true">/</span>
+              <span id="detail-breadcrumb-name" aria-current="page"></span>
             </nav>
-            <h1 id="catalogo-titulo">Produtos.</h1>
-            <p>Conheça os conjuntos da JJ Style e consulte os preços pelo WhatsApp.</p>
+            <div class="detail-grid">
+              <div class="detail-media">
+                <img id="detail-image" alt="" width="1086" height="1448">
+              </div>
+              <div class="detail-info">
+                <p class="eyebrow">JJ Style</p>
+                <h1 id="detail-name"></h1>
+                <p class="detail-price">Preço sob consulta</p>
+                <div class="detail-colors">
+                  <p class="detail-label">Cores disponíveis</p>
+                  <div id="detail-options" class="product-options" role="group"></div>
+                  <p class="detail-selected">Cor selecionada: <span id="detail-color-name" aria-live="polite"></span></p>
+                </div>
+                <a id="detail-whatsapp" class="btn detail-whatsapp" target="_blank" rel="noopener noreferrer">Consultar no WhatsApp <span aria-hidden="true">↗</span></a>
+                <a class="detail-back" href="produtos.html">← Voltar ao catálogo</a>
+              </div>
+            </div>
           </div>
-          <div class="catalog-grid" aria-label="Produtos da JJ Style" data-product-list="catalog"></div>
+          <div id="product-not-found" class="detail-not-found" hidden>
+            <h1>Produto não encontrado.</h1>
+            <p>Não encontramos um produto para este endereço.</p>
+            <a class="btn detail-whatsapp" href="produtos.html">Ver produtos</a>
+          </div>
         </div>
       </section>
     </main>

@@ -373,6 +373,14 @@ section[id] {
   border-radius: 0;
   transition: transform .25s ease;
 }
+.product-image-link {
+  display: block;
+  overflow: hidden;
+}
+.product-image-link:focus-visible {
+  outline: 3px solid var(--orange);
+  outline-offset: -3px;
+}
 .product-card:hover .card-img-top, .product-card:focus-within .card-img-top {
   transform: scale(1.025);
 }
@@ -388,6 +396,13 @@ section[id] {
   font-weight: 600;
   line-height: 23px;
   white-space: normal;
+}
+.product-name-link {
+  color: inherit;
+  text-decoration: none;
+}
+.product-name-link:hover, .product-name-link:focus-visible {
+  color: var(--orange);
 }
 .product-variant {
   margin: 0;
@@ -506,6 +521,10 @@ section[id] {
   color: inherit;
   text-decoration: none;
 }
+.catalog-breadcrumb > span[aria-hidden="true"] {
+  color: var(--orange);
+  opacity: .75;
+}
 .catalog-breadcrumb a:hover, .catalog-breadcrumb a:focus-visible {
   color: var(--orange);
 }
@@ -529,6 +548,125 @@ section[id] {
 }
 .catalog-grid .card-img-top {
   height: 320px;
+}
+
+/* Página individual do produto */
+.detail-section {
+  min-height: 650px;
+  padding: 40px 0 76px;
+  border-top: 1px solid var(--line);
+  background: var(--surface);
+}
+.detail-breadcrumb {
+  flex-wrap: wrap;
+  margin-bottom: 28px;
+}
+.detail-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr);
+  align-items: start;
+  gap: clamp(30px, 5vw, 76px);
+}
+.detail-media {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--card);
+}
+.detail-media img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.detail-info {
+  padding-top: clamp(12px, 3vw, 48px);
+}
+.detail-info h1 {
+  margin: 0 0 24px;
+  font-size: clamp(31px, 3.2vw, 46px);
+  font-weight: 700;
+  line-height: 1.12;
+  letter-spacing: -1.5px;
+}
+.detail-price {
+  margin: 0 0 30px;
+  font-size: 25px;
+  font-weight: 700;
+}
+.detail-colors {
+  padding: 22px 0;
+  border-block: 1px solid var(--line);
+}
+.detail-label {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .6px;
+  text-transform: uppercase;
+}
+.detail-colors .product-options {
+  gap: 10px;
+  margin: 12px 0 8px;
+}
+.detail-colors .product-option {
+  flex-basis: 42px;
+  width: 42px;
+  height: 42px;
+}
+.detail-selected {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+.detail-selected span {
+  color: var(--text);
+  font-weight: 600;
+}
+.detail-whatsapp {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  min-height: 52px;
+  margin-top: 28px;
+  padding: 12px 22px;
+  border-radius: 999px;
+  background: var(--text);
+  color: var(--bg);
+  font-size: 13px;
+  font-weight: 800;
+  text-decoration: none;
+}
+.detail-whatsapp:hover, .detail-whatsapp:focus-visible {
+  background: #fff;
+  color: var(--bg);
+  outline: 2px solid var(--orange);
+  outline-offset: 3px;
+}
+.detail-whatsapp[aria-disabled="true"] {
+  opacity: .5;
+  pointer-events: none;
+}
+.detail-back {
+  display: block;
+  width: fit-content;
+  margin-top: 24px;
+  color: var(--muted);
+  font-size: 13px;
+  text-decoration: none;
+}
+.detail-back:hover, .detail-back:focus-visible {
+  color: var(--orange);
+}
+.detail-not-found {
+  max-width: 560px;
+  padding: 60px 0;
+}
+.detail-not-found h1 {
+  font-size: clamp(32px, 3.5vw, 46px);
+}
+.detail-not-found p {
+  color: var(--muted);
 }
 /* Atacado e varejo */
 .wholesale {
@@ -1200,6 +1338,25 @@ section[id] {
   }
   .catalog-grid .card-img-top {
     height: 300px;
+  }
+  .detail-section {
+    padding: 28px 0 52px;
+  }
+  .detail-breadcrumb {
+    margin-bottom: 20px;
+  }
+  .detail-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .detail-info {
+    padding-top: 0;
+  }
+  .detail-info h1 {
+    margin-bottom: 18px;
+  }
+  .detail-price {
+    margin-bottom: 20px;
   }
   .wholesale {
     display: block;

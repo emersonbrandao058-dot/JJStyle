@@ -8,6 +8,7 @@ const STORE_CONFIG = Object.freeze({
 // Cada modelo aparece uma vez; Home e catálogo escolhem quantos cards exibir.
 const PRODUCTS = [
   {
+    id: 'puma-essentials',
     name: 'Conjunto Puma Essentials',
     versions: [
       {
@@ -27,6 +28,7 @@ const PRODUCTS = [
     ]
   },
   {
+    id: 'adidas-performance',
     name: 'Conjunto Adidas Performance',
     versions: [
       {
@@ -46,6 +48,7 @@ const PRODUCTS = [
     ]
   },
   {
+    id: 'puma-sport',
     name: 'Conjunto Puma Sport',
     versions: [
       {
@@ -65,6 +68,7 @@ const PRODUCTS = [
     ]
   },
   {
+    id: 'lacoste-sport',
     name: 'Conjunto Lacoste Sport',
     versions: [
       {
@@ -84,6 +88,7 @@ const PRODUCTS = [
     ]
   },
   {
+    id: 'quiksilver-classic',
     name: 'Conjunto Quiksilver Classic',
     versions: [
       {
@@ -103,6 +108,7 @@ const PRODUCTS = [
     ]
   },
   {
+    id: 'brt',
     name: 'Conjunto BRT',
     versions: [
       {
@@ -152,13 +158,22 @@ function makeWhatsAppIcon() {
   return icon;
 }
 
-function selectProductVersion(card, version, selectedButton, number, animateImage = false) {
+function productUrl(productId, versionIndex) {
+  return `produto.html?id=${encodeURIComponent(productId)}&versao=${versionIndex + 1}`;
+}
+
+function selectProductVersion(card, version, selectedButton, number, versionIndex, animateImage = false) {
   const image = card.querySelector('.card-img-top');
   const description = card.querySelector('.product-variant');
   const contactLink = card.querySelector('.product-whatsapp');
 
   image.src = version.image;
   image.alt = version.alt;
+  const detailUrl = productUrl(card.dataset.productId, versionIndex);
+  const imageLink = card.querySelector('.product-image-link');
+  imageLink.href = detailUrl;
+  imageLink.setAttribute('aria-label', `Ver ${card.querySelector('.card-title').textContent}, cor ${version.description}`);
+  card.querySelector('.product-name-link').href = detailUrl;
   if (animateImage && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     const selectedImage = image.src;
     const fadeIn = () => {
@@ -194,16 +209,25 @@ function selectProductVersion(card, version, selectedButton, number, animateImag
 
 function createProductCard(product, headingTag, number) {
   const card = makeElement('article', 'card product-card');
+  card.dataset.productId = product.id;
   const firstVersion = product.versions[0];
+  const imageLink = makeElement('a', 'product-image-link');
+  imageLink.href = productUrl(product.id, 0);
+  imageLink.setAttribute('aria-label', `Ver ${product.name}, cor ${firstVersion.description}`);
   const image = makeElement('img', 'card-img-top');
   image.src = firstVersion.image;
   image.alt = firstVersion.alt;
   image.width = 1086;
   image.height = 1448;
   image.loading = 'lazy';
+  imageLink.append(image);
 
   const body = makeElement('div', 'card-body');
-  body.append(makeElement(headingTag, 'card-title', product.name));
+  const heading = makeElement(headingTag, 'card-title');
+  const nameLink = makeElement('a', 'product-name-link', product.name);
+  nameLink.href = imageLink.href;
+  heading.append(nameLink);
+  body.append(heading);
 
   if (product.versions.length > 1) {
     const options = makeElement('div', 'product-options');
@@ -221,7 +245,7 @@ function createProductCard(product, headingTag, number) {
         : `linear-gradient(90deg, ${version.swatch[0]} 50%, ${version.swatch[1]} 50%)`;
       button.style.setProperty('--swatch-fill', swatchFill);
       button.addEventListener('click', () => {
-        selectProductVersion(card, version, button, number, true);
+        selectProductVersion(card, version, button, number, index, true);
       });
       options.append(button);
     });
@@ -242,8 +266,8 @@ function createProductCard(product, headingTag, number) {
     makeElement('span', 'product-whatsapp-arrow', '→')
   );
   body.append(contactLink);
-  card.append(image, body);
-  selectProductVersion(card, firstVersion, card.querySelector('.product-option'), number);
+  card.append(imageLink, body);
+  selectProductVersion(card, firstVersion, card.querySelector('.product-option'), number, 0);
   return card;
 }
 
@@ -254,6 +278,67 @@ function renderProducts(number) {
     const headingTag = isHome ? 'h3' : 'h2';
     list.replaceChildren(...products.map((product) => createProductCard(product, headingTag, number)));
   });
+}
+
+function renderProductDetail(number) {
+  const detail = document.getElementById('product-detail');
+  if (!detail) return;
+
+  const params = new URLSearchParams(window.location.search);
+  const product = PRODUCTS.find((item) => item.id === params.get('id'));
+  if (!product) {
+    document.getElementById('product-not-found').hidden = false;
+    document.title = 'Produto não encontrado | JJ Style';
+    return;
+  }
+
+  const requestedVersion = Number(params.get('versao')) - 1;
+  const initialIndex = Number.isInteger(requestedVersion) && requestedVersion >= 0 && requestedVersion < product.versions.length
+    ? requestedVersion
+    : 0;
+  const image = document.getElementById('detail-image');
+  const colorName = document.getElementById('detail-color-name');
+  const contactLink = document.getElementById('detail-whatsapp');
+  const options = document.getElementById('detail-options');
+
+  document.title = `${product.name} | JJ Style`;
+  document.getElementById('detail-breadcrumb-name').textContent = product.name;
+  document.getElementById('detail-name').textContent = product.name;
+  options.setAttribute('aria-label', `Cores de ${product.name}`);
+
+  function selectVersion(index, updateUrl = false) {
+    const version = product.versions[index];
+    image.src = version.image;
+    image.alt = version.alt;
+    colorName.textContent = version.description;
+    contactLink.setAttribute('aria-label', `Consultar ${product.name}, cor ${version.description}, no WhatsApp`);
+    if (/^\d{12,15}$/.test(number)) {
+      contactLink.href = `https://wa.me/${number}?text=${encodeURIComponent(version.whatsappText)}`;
+      contactLink.removeAttribute('aria-disabled');
+    } else {
+      contactLink.removeAttribute('href');
+      contactLink.setAttribute('aria-disabled', 'true');
+    }
+    options.querySelectorAll('.product-option').forEach((button, buttonIndex) => {
+      button.setAttribute('aria-pressed', String(buttonIndex === index));
+    });
+    if (updateUrl) window.history.replaceState(null, '', productUrl(product.id, index));
+  }
+
+  product.versions.forEach((version, index) => {
+    const button = makeElement('button', 'product-option');
+    button.type = 'button';
+    button.title = version.description;
+    button.setAttribute('aria-label', `Selecionar cor ${version.description}`);
+    button.style.setProperty('--swatch-fill', version.swatch.length === 1
+      ? version.swatch[0]
+      : `linear-gradient(90deg, ${version.swatch[0]} 50%, ${version.swatch[1]} 50%)`);
+    button.addEventListener('click', () => selectVersion(index, true));
+    options.append(button);
+  });
+
+  selectVersion(initialIndex);
+  detail.hidden = false;
 }
 
 function activateExternalLink(link, href) {
@@ -383,6 +468,7 @@ function initializeLocation() {
 
 loadBootstrap();
 renderProducts(STORE_CONFIG.whatsappNumber.replace(/\D/g, ''));
+renderProductDetail(STORE_CONFIG.whatsappNumber.replace(/\D/g, ''));
 initializeWhatsApp();
 initializeInstagram();
 initializeLocation();
