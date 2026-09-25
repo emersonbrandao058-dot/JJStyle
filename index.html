@@ -1,0 +1,415 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#090b0f">
+    <meta name="description" content="JJ Style: moda masculina, produtos e atendimento para atacado e varejo.">
+    <title>JJ Style | Moda masculina</title>
+    <link rel="icon" href="images/branding/favicon.png" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="vendor/bootstrap/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css?v=3">
+  </head>
+  <body>
+    <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+    <header class="site-header" id="inicio">
+      <nav class="navbar navbar-expand-lg site-nav" aria-label="Navegação principal">
+        <div class="container-wide nav-inner">
+          <a class="navbar-brand brand-link" href="#inicio" aria-label="JJ Style, início">
+            <img src="images/branding/logo-jj-style.png" alt="JJ Style" width="700" height="663">
+          </a>
+          <button
+            class="navbar-toggler menu-toggle"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#menu-principal"
+            aria-controls="menu-principal"
+            aria-expanded="false"
+            aria-label="Abrir menu">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="menu-principal">
+            <ul class="navbar-nav nav-links">
+              <li class="nav-item"><a class="nav-link" href="#inicio">Início</a></li>
+              <li class="nav-item"><a class="nav-link" href="#produtos">Produtos</a></li>
+              <li class="nav-item"><a class="nav-link" href="#sobre">Sobre</a></li>
+            </ul>
+            <a class="btn nav-contact" id="header-whatsapp" href="#contato">Fale conosco <span aria-hidden="true">↗</span></a>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main id="conteudo">
+      <h1 class="visually-hidden">JJ Style — moda masculina</h1>
+      <section class="hero" aria-label="Destaques da JJ Style">
+        <div
+          id="carousel-destaques"
+          class="carousel slide"
+          data-bs-ride="carousel"
+          data-bs-interval="6000"
+          aria-roledescription="carrossel">
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <picture>
+                <source media="(max-width: 767px)" srcset="images/banners/banner-01-atitude-mobile.png">
+                <img
+                  class="hero-art"
+                  src="images/banners/banner-01-atitude-desktop.png"
+                  alt="Vista sua atitude. Moda masculina para o seu dia a dia."
+                  width="1916"
+                  height="821"
+                  fetchpriority="high">
+              </picture>
+              <a class="hero-cta hero-cta-one" href="#produtos" aria-label="Conheça os produtos da JJ Style">
+                <span class="hero-mobile-action" aria-hidden="true">Ver produtos <span>→</span></span>
+              </a>
+            </div>
+            <div class="carousel-item">
+              <picture>
+                <source media="(max-width: 767px)" srcset="images/banners/banner-02-atacado-mobile.png">
+                <img
+                  class="hero-art"
+                  src="images/banners/banner-02-atacado-desktop.png"
+                  alt="Atacado e varejo. Peças para você ou para o seu negócio."
+                  width="2172"
+                  height="724">
+              </picture>
+              <a class="hero-cta hero-cta-two" href="#atacado" aria-label="Conheça as condições de atacado e varejo">
+              </a>
+            </div>
+            <div class="carousel-item">
+              <picture>
+                <source media="(max-width: 767px)" srcset="images/banners/banner-03-novidades-mobile.png">
+                <img
+                  class="hero-art"
+                  src="images/banners/banner-03-novidades-desktop.png"
+                  alt="Novidades da semana. Looks novos para atualizar o visual."
+                  width="1916"
+                  height="821">
+              </picture>
+              <a class="hero-cta hero-cta-three" href="#produtos" aria-label="Ver produtos da semana">
+                <span class="hero-mobile-action" aria-hidden="true">Ver produtos <span>→</span></span>
+              </a>
+            </div>
+          </div>
+          <button
+            class="carousel-control-prev hero-control"
+            type="button"
+            data-bs-target="#carousel-destaques"
+            data-bs-slide="prev"
+            aria-label="Banner anterior">
+            <span aria-hidden="true">‹</span>
+          </button>
+          <button
+            class="carousel-control-next hero-control"
+            type="button"
+            data-bs-target="#carousel-destaques"
+            data-bs-slide="next"
+            aria-label="Próximo banner">
+            <span aria-hidden="true">›</span>
+          </button>
+          <div class="carousel-indicators hero-indicators">
+            <button
+              type="button"
+              data-bs-target="#carousel-destaques"
+              data-bs-slide-to="0"
+              class="active"
+              aria-current="true"
+              aria-label="Mostrar banner 1">
+            </button>
+            <button
+              type="button"
+              data-bs-target="#carousel-destaques"
+              data-bs-slide-to="1"
+              aria-label="Mostrar banner 2">
+            </button>
+            <button
+              type="button"
+              data-bs-target="#carousel-destaques"
+              data-bs-slide-to="2"
+              aria-label="Mostrar banner 3">
+            </button>
+          </div>
+        </div>
+      </section>
+      <section class="brands" aria-label="Marcas disponíveis na JJ Style" tabindex="0">
+        <div class="brands-track">
+          <div class="brands-group">
+            <span class="brand-slot">
+              <img src="images/brands/marca-puma.png" alt="Puma" width="2416" height="1220" loading="lazy">
+            </span>
+            <span class="brand-slot">
+              <img src="images/brands/marca-nike.png" alt="Nike" width="2394" height="1250" loading="lazy">
+            </span>
+            <span class="brand-slot">
+              <img src="images/brands/marca-lacoste.png" alt="Lacoste" width="2072" height="1472" loading="lazy">
+            </span>
+            <span class="brand-slot">
+              <img src="images/brands/marca-adidas.png" alt="Adidas" width="2300" height="1586" loading="lazy">
+            </span>
+            <span class="brand-slot">
+              <img src="images/brands/marca-seaway.png" alt="Seaway" width="2238" height="330" loading="lazy">
+            </span>
+            <span class="brand-slot">
+              <img src="images/brands/marca-quiksilver.png" alt="Quiksilver" width="3778" height="696" loading="lazy">
+            </span>
+          </div>
+          <!-- Cópia decorativa para manter o movimento contínuo. -->
+          <div class="brands-group" aria-hidden="true">
+            <span class="brand-slot">
+              <img src="images/brands/marca-puma.png" alt="" width="2416" height="1220" loading="lazy">
+            </span>
+            <span class="brand-slot">
+              <img src="images/brands/marca-nike.png" alt="" width="2394" height="1250" loading="lazy">
+            </span>
+            <span class="brand-slot">
+              <img src="images/brands/marca-lacoste.png" alt="" width="2072" height="1472" loading="lazy">
+            </span>
+            <span class="brand-slot">
+              <img src="images/brands/marca-adidas.png" alt="" width="2300" height="1586" loading="lazy">
+            </span>
+            <span class="brand-slot">
+              <img src="images/brands/marca-seaway.png" alt="" width="2238" height="330" loading="lazy">
+            </span>
+            <span class="brand-slot">
+              <img src="images/brands/marca-quiksilver.png" alt="" width="3778" height="696" loading="lazy">
+            </span>
+          </div>
+          <div class="brands-group" aria-hidden="true">
+            <span class="brand-slot">
+              <img src="images/brands/marca-puma.png" alt="" width="2416" height="1220" loading="lazy">
+            </span>
+            <span class="brand-slot">
+              <img src="images/brands/marca-nike.png" alt="" width="2394" height="1250" loading="lazy">
+            </span>
+            <span class="brand-slot">
+              <img src="images/brands/marca-lacoste.png" alt="" width="2072" height="1472" loading="lazy">
+            </span>
+            <span class="brand-slot">
+              <img src="images/brands/marca-adidas.png" alt="" width="2300" height="1586" loading="lazy">
+            </span>
+            <span class="brand-slot">
+              <img src="images/brands/marca-seaway.png" alt="" width="2238" height="330" loading="lazy">
+            </span>
+            <span class="brand-slot">
+              <img src="images/brands/marca-quiksilver.png" alt="" width="3778" height="696" loading="lazy">
+            </span>
+          </div>
+        </div>
+      </section>
+      <section class="products-section" id="produtos" aria-labelledby="produtos-titulo">
+        <div class="container-wide">
+          <div class="section-head">
+            <div>
+              <h2 id="produtos-titulo">Produtos.</h2>
+              <p>Encontre o conjunto que combina com você.</p>
+            </div>
+            <a class="view-all" id="ver-todos" href="produtos.html">Ver todos <span aria-hidden="true">→</span></a>
+          </div>
+          <div class="products-rail" id="lista-produtos" aria-label="Produtos da JJ Style" tabindex="0" data-product-list="home"></div>
+        </div>
+      </section>
+      <section class="wholesale" id="atacado" aria-labelledby="atacado-titulo">
+        <div class="wholesale-media">
+          <img
+            src="images/banners/banner-02-atacado-mobile.png"
+            alt="Conjuntos esportivos e calçados disponíveis na JJ Style"
+            width="1122"
+            height="1402"
+            loading="lazy">
+        </div>
+        <div class="wholesale-content">
+          <div class="wholesale-copy">
+            <p class="eyebrow">Compra para revenda?</p>
+            <h2 id="atacado-titulo">Condições especiais para lojistas.</h2>
+            <p>Consulte opções de atacado e varejo com a JJ Style.</p>
+          </div>
+          <button
+            class="btn orange-button wholesale-button"
+            type="button"
+            data-whatsapp-message="Olá! Gostaria de saber mais sobre as condições para lojistas."
+            disabled>Chamar no WhatsApp <span aria-hidden="true">→</span>
+          </button>
+        </div>
+      </section>
+      <section class="about-section" id="sobre" aria-labelledby="sobre-titulo">
+        <div class="container-wide about-grid">
+          <div class="about-photo">
+            <img
+              src="images/loja/loja-jj-style.png"
+              alt="Interior da loja JJ Style com roupas expostas"
+              width="1292"
+              height="1218"
+              loading="lazy">
+          </div>
+          <div class="about-card">
+            <p class="eyebrow">Conheça a JJ Style.</p>
+            <h2 id="sobre-titulo">Moda masculina em Feira de Santana.</h2>
+            <p>Peças e novidades para o dia a dia, com atendimento para atacado e varejo.</p>
+            <ul class="about-facts" aria-label="Informações da loja">
+              <li>Feira de Santana, BA</li>
+              <li>Atacado e varejo</li>
+            </ul>
+            <a class="btn outline-button" href="#contato">Entre em contato <span aria-hidden="true">↗</span></a>
+          </div>
+        </div>
+      </section>
+      <section class="contact-section" id="contato" aria-label="Contato e localização">
+        <div class="container-wide">
+          <div class="contact-grid">
+            <div class="contact-column">
+              <h2>Ficou com alguma dúvida?</h2>
+              <p class="contact-intro">Nossa equipe está pronta para atender você. Entre em contato para dúvidas, pedidos ou orçamento.</p>
+              <form id="form-contato">
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <label class="form-label" for="nome">Nome completo</label>
+                    <input class="form-control" id="nome" name="nome" type="text" autocomplete="name" placeholder="Seu nome" required>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label" for="telefone">WhatsApp</label>
+                    <input
+                      class="form-control"
+                      id="telefone"
+                      name="telefone"
+                      type="tel"
+                      autocomplete="tel"
+                      inputmode="tel"
+                      placeholder="(00) 00000-0000"
+                      required>
+                  </div>
+                  <div class="col-12">
+                    <label class="form-label" for="assunto">Assunto</label>
+                    <input class="form-control" id="assunto" name="assunto" type="text" placeholder="Qual é o assunto?" required>
+                  </div>
+                  <div class="col-12">
+                    <label class="form-label" for="mensagem">Mensagem</label>
+                    <textarea
+                      class="form-control"
+                      id="mensagem"
+                      name="mensagem"
+                      rows="5"
+                      placeholder="Escreva sua mensagem aqui..."
+                      required>
+                    </textarea>
+                  </div>
+                </div>
+                <button class="btn orange-button submit-button" type="submit" disabled>Enviar mensagem <span aria-hidden="true">→</span>
+                </button>
+                <p class="form-note" id="form-note" role="status">Ao continuar, a mensagem será preparada no WhatsApp. Confirme o envio no aplicativo.</p>
+              </form>
+            </div>
+            <div class="contact-column location-column" id="localizacao">
+              <h2>Visite a JJ Style.</h2>
+              <p class="contact-intro">Conheça nossa loja em Feira de Santana.</p>
+              <div class="location-info">
+                <strong>Feira de Santana, BA</strong>
+                <span id="address-text">Confira a localização no mapa abaixo.</span>
+              </div>
+              <div class="map-embed">
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3898.3223492205793!2d-38.954679825703096!3d-12.294065346552946!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x714365a3df8dd87%3A0x8ea0f89ca43a7433!2sR.%20Comendador%20Gomes%2C%20483%20-%20Parque%20Panorama%2C%20Feira%20de%20Santana%20-%20BA%2C%2044091-238!5e0!3m2!1spt-BR!2sbr!4v1790253158107!5m2!1spt-BR!2sbr"
+                  title="Localização da JJ Style"
+                  allowfullscreen=""
+                  loading="lazy"
+                  referrerpolicy="strict-origin-when-cross-origin"></iframe>
+              </div>
+              <div class="contact-socials">
+                <p>Redes sociais</p>
+                <div class="social-links" aria-label="Redes sociais da JJ Style">
+                  <a
+                    class="social-link social-instagram"
+                    data-social="instagram"
+                    role="link"
+                    tabindex="0"
+                    aria-label="Visitar a JJ Style no Instagram"
+                    title="Visitar a JJ Style no Instagram">
+                    <span class="social-icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" fill="none">
+                        <rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="1.8"/>
+                        <circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.8"/>
+                        <circle cx="17.5" cy="6.5" r="1.2" fill="currentColor"/>
+                      </svg>
+                    </span>
+                    <span class="social-arrow" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" fill="none">
+                        <path d="M5 12h13m-5-5 5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    </span>
+                  </a>
+                  <a
+                    class="social-link social-whatsapp"
+                    data-social="whatsapp"
+                    role="link"
+                    tabindex="0"
+                    aria-label="Conversar com a JJ Style no WhatsApp"
+                    title="Conversar com a JJ Style no WhatsApp">
+                    <span class="social-icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" fill="none">
+                        <path d="M5.2 17.8 3.8 21l3.5-1.2A9 9 0 1 0 5.2 17.8Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+                        <path
+                          d="M8.2 7.8c.3-.4.6-.4.9-.4h.5c.2 0 .4.1.5.4l.8 1.9c.1.3.1.5-.1.7l-.7.9c.7 1.2 1.6 2.1 2.8 2.7l.9-.7c.2-.2.5-.2.7-.1l1.9.8c.3.1.4.3.4.5v.5c0 .4-.1.7-.4.9-.5.4-1.2.6-1.9.4-2.8-.7-5.3-3.1-6.4-5.8-.3-.8-.3-1.5.1-2.1Z"
+                          stroke="currentColor"
+                          stroke-width="1.4"
+                          stroke-linejoin="round"/>
+                      </svg>
+                    </span>
+                    <span class="social-arrow" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" fill="none">
+                        <path d="M5 12h13m-5-5 5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    </span>
+                  </a>
+                </div>
+              </div>
+              <div class="location-actions">
+                <button class="location-action" id="route-button" type="button" disabled>Ver rotas <span aria-hidden="true">↗</span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <ul class="benefits" aria-label="Destaques da JJ Style">
+            <li>Moda masculina</li>
+            <li>Atacado e varejo</li>
+            <li>Atendimento direto</li>
+          </ul>
+        </div>
+      </section>
+    </main>
+    <footer class="site-footer">
+      <div class="container-wide footer-main">
+        <a class="footer-brand" href="#inicio" aria-label="JJ Style, voltar ao início">
+          <img src="images/branding/logo-jj-style.png" alt="JJ Style" width="700" height="663" loading="lazy">
+        </a>
+        <div class="footer-column">
+          <h2>Links rápidos</h2>
+          <a href="#inicio">Início</a>
+          <a href="#produtos">Produtos</a>
+          <a href="#sobre">Sobre</a>
+          <a href="#contato">Contato</a>
+        </div>
+        <div class="footer-column">
+          <h2>Atendimento</h2>
+          <a href="#atacado">Atacado e varejo</a>
+          <a id="footer-whatsapp" href="#contato">Fale com a loja</a>
+        </div>
+        <div class="footer-column footer-location">
+          <h2>Localização</h2>
+          <p>Feira de Santana, BA</p>
+          <p data-store-address></p>
+        </div>
+      </div>
+      <div class="container-wide footer-bottom">
+        <p>© 2026 JJ Style. Todos os direitos reservados.</p>
+        <p>Estilo • Atitude • Sempre com você</p>
+      </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/main.js" defer></script>
+  </body>
+</html>

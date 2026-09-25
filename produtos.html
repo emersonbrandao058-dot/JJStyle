@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#090b0f">
+    <meta name="description" content="Produtos de moda masculina da JJ Style. Consulte preços pelo WhatsApp.">
+    <title>Produtos | JJ Style</title>
+    <link rel="icon" href="images/branding/favicon.png" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="vendor/bootstrap/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+  </head>
+  <body>
+    <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+    <header class="site-header" id="inicio">
+      <nav class="navbar navbar-expand-lg site-nav" aria-label="Navegação principal">
+        <div class="container-wide nav-inner">
+          <a class="navbar-brand brand-link" href="index.html#inicio" aria-label="JJ Style, início">
+            <img src="images/branding/logo-jj-style.png" alt="JJ Style" width="700" height="663">
+          </a>
+          <button
+            class="navbar-toggler menu-toggle"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#menu-principal"
+            aria-controls="menu-principal"
+            aria-expanded="false"
+            aria-label="Abrir menu">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="menu-principal">
+            <ul class="navbar-nav nav-links">
+              <li class="nav-item"><a class="nav-link" href="index.html#inicio">Início</a></li>
+              <li class="nav-item"><a class="nav-link" href="produtos.html" aria-current="page">Produtos</a></li>
+              <li class="nav-item"><a class="nav-link" href="index.html#sobre">Sobre</a></li>
+            </ul>
+            <a class="btn nav-contact" id="header-whatsapp" href="index.html#contato">Fale conosco <span aria-hidden="true">↗</span></a>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main id="conteudo">
+      <section class="catalog-section" id="produtos" aria-labelledby="catalogo-titulo">
+        <div class="container-wide">
+          <div class="catalog-heading">
+            <nav class="catalog-breadcrumb" aria-label="Caminho de navegação">
+              <a href="index.html#inicio">Início</a>
+              <span aria-hidden="true">/</span>
+              <span aria-current="page">Produtos</span>
+            </nav>
+            <h1 id="catalogo-titulo">Produtos.</h1>
+            <p>Conheça os conjuntos da JJ Style e consulte os preços pelo WhatsApp.</p>
+          </div>
+          <div class="catalog-grid" aria-label="Produtos da JJ Style" data-product-list="catalog"></div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container-wide footer-main">
+        <a class="footer-brand" href="index.html#inicio" aria-label="JJ Style, voltar ao início">
+          <img src="images/branding/logo-jj-style.png" alt="JJ Style" width="700" height="663" loading="lazy">
+        </a>
+        <div class="footer-column">
+          <h2>Links rápidos</h2>
+          <a href="index.html#inicio">Início</a>
+          <a href="produtos.html">Produtos</a>
+          <a href="index.html#sobre">Sobre</a>
+          <a href="index.html#contato">Contato</a>
+        </div>
+        <div class="footer-column">
+          <h2>Atendimento</h2>
+          <a href="index.html#atacado">Atacado e varejo</a>
+          <a id="footer-whatsapp" href="index.html#contato">Fale com a loja</a>
+        </div>
+        <div class="footer-column footer-location">
+          <h2>Localização</h2>
+          <p>Feira de Santana, BA</p>
+          <p data-store-address></p>
+        </div>
+      </div>
+      <div class="container-wide footer-bottom">
+        <p>© 2026 JJ Style. Todos os direitos reservados.</p>
+        <p>Estilo • Atitude • Sempre com você</p>
+      </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/main.js" defer></script>
+  </body>
+</html>
