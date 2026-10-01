@@ -1,4 +1,6 @@
 // Número com DDI e DDD; mensagens são montadas antes de abrir o WhatsApp.
+// 01. Configuração: destinos e endereço. freeze protege as propriedades do objeto.
+// O WhatsApp é de demonstração acadêmica; as mensagens dos produtos ficam em versions.
 const STORE_CONFIG = Object.freeze({
   whatsappNumber: '5575999312633',
   instagramUrl: 'https://www.instagram.com/jjstylle_/',
@@ -6,6 +8,8 @@ const STORE_CONFIG = Object.freeze({
 });
 
 // Cada modelo aparece uma vez; Home e catálogo escolhem quantos cards exibir.
+// 02. Dados únicos: cada modelo possui id, nome e duas versões de cor.
+// Cada versão guarda amostra (swatch), foto, descrição, alt e mensagem de consulta.
 const PRODUCTS = [
   {
     id: 'puma-essentials',
@@ -129,6 +133,7 @@ const PRODUCTS = [
   }
 ];
 
+// 03. Construção do DOM: cria a tag, aplica classe e texto, e devolve o elemento.
 function makeElement(tag, className, textContent) {
   const element = document.createElement(tag);
   if (className) element.className = className;
@@ -136,6 +141,7 @@ function makeElement(tag, className, textContent) {
   return element;
 }
 
+// Cria o ícone vetorial SVG. Os paths abaixo descrevem sua geometria.
 function makeWhatsAppIcon() {
   const namespace = 'http://www.w3.org/2000/svg';
   const icon = document.createElementNS(namespace, 'svg');
@@ -158,10 +164,12 @@ function makeWhatsAppIcon() {
   return icon;
 }
 
+// 04. URL do detalhe: id escolhe o modelo; versao usa índice + 1 porque o array começa em zero.
 function productUrl(productId, versionIndex) {
   return `produto.html?id=${encodeURIComponent(productId)}&versao=${versionIndex + 1}`;
 }
 
+// 05. Seleção no card: mantém foto, descrição, links e botão ativo na mesma versão.
 function selectProductVersion(card, version, selectedButton, number, versionIndex, animateImage = false) {
   const image = card.querySelector('.card-img-top');
   const description = card.querySelector('.product-variant');
@@ -174,6 +182,7 @@ function selectProductVersion(card, version, selectedButton, number, versionInde
   imageLink.href = detailUrl;
   imageLink.setAttribute('aria-label', `Ver ${card.querySelector('.card-title').textContent}, cor ${version.description}`);
   card.querySelector('.product-name-link').href = detailUrl;
+  // A animação da foto respeita a preferência por movimento reduzido.
   if (animateImage && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     const selectedImage = image.src;
     const fadeIn = () => {
@@ -194,6 +203,7 @@ function selectProductVersion(card, version, selectedButton, number, versionInde
     'aria-label',
     `Consultar ${card.querySelector('.card-title').textContent}, cor ${version.description}, no WhatsApp`
   );
+  // Verifica o formato do número, não a existência ou propriedade do contato.
   if (/^\d{12,15}$/.test(number)) {
     contactLink.href = `https://wa.me/${number}?text=${encodeURIComponent(version.whatsappText)}`;
     contactLink.removeAttribute('aria-disabled');
@@ -202,11 +212,14 @@ function selectProductVersion(card, version, selectedButton, number, versionInde
     contactLink.setAttribute('aria-disabled', 'true');
   }
 
+  // aria-pressed comunica a escolha e também aciona a borda definida no CSS.
   card.querySelectorAll('.product-option').forEach((button) => {
     button.setAttribute('aria-pressed', String(button === selectedButton));
   });
 }
 
+// 06. Card dinâmico: combina classes Bootstrap (card/btn) e classes próprias.
+// Monta imagem, título, cores e consulta a partir de um objeto de PRODUCTS.
 function createProductCard(product, headingTag, number) {
   const card = makeElement('article', 'card product-card');
   card.dataset.productId = product.id;
@@ -229,6 +242,7 @@ function createProductCard(product, headingTag, number) {
   heading.append(nameLink);
   body.append(heading);
 
+  // Cada versão gera um botão; seu clique atualiza o card sem recriar a vitrine.
   if (product.versions.length > 1) {
     const options = makeElement('div', 'product-options');
     options.setAttribute('role', 'group');
@@ -271,7 +285,9 @@ function createProductCard(product, headingTag, number) {
   return card;
 }
 
+// 07. Vitrines: data-product-list distingue a Home (quatro modelos) do catálogo (seis).
 function renderProducts(number) {
+  // slice seleciona a quantidade; map constrói os cards; replaceChildren os insere.
   document.querySelectorAll('[data-product-list]').forEach((list) => {
     const isHome = list.dataset.productList === 'home';
     const products = isHome ? PRODUCTS.slice(0, 4) : PRODUCTS;
@@ -280,10 +296,12 @@ function renderProducts(number) {
   });
 }
 
+// 08. Detalhe reutilizável: lê os parâmetros da URL e preenche os elementos de produto.html.
 function renderProductDetail(number) {
   const detail = document.getElementById('product-detail');
   if (!detail) return;
 
+  // O mesmo script atende três páginas; a ausência do detalhe encerra esta função.
   const params = new URLSearchParams(window.location.search);
   const product = PRODUCTS.find((item) => item.id === params.get('id'));
   if (!product) {
@@ -292,6 +310,7 @@ function renderProductDetail(number) {
     return;
   }
 
+  // Converte a versão da URL para índice e usa zero quando o valor é inválido.
   const requestedVersion = Number(params.get('versao')) - 1;
   const initialIndex = Number.isInteger(requestedVersion) && requestedVersion >= 0 && requestedVersion < product.versions.length
     ? requestedVersion
@@ -306,6 +325,7 @@ function renderProductDetail(number) {
   document.getElementById('detail-name').textContent = product.name;
   options.setAttribute('aria-label', `Cores de ${product.name}`);
 
+  // A seleção no detalhe atualiza os dados e pode sincronizar a URL sem recarregar.
   function selectVersion(index, updateUrl = false) {
     const version = product.versions[index];
     image.src = version.image;
@@ -322,6 +342,7 @@ function renderProductDetail(number) {
     options.querySelectorAll('.product-option').forEach((button, buttonIndex) => {
       button.setAttribute('aria-pressed', String(buttonIndex === index));
     });
+    // replaceState altera o endereço atual sem criar uma nova entrada no histórico.
     if (updateUrl) window.history.replaceState(null, '', productUrl(product.id, index));
   }
 
@@ -341,18 +362,21 @@ function renderProductDetail(number) {
   detail.hidden = false;
 }
 
+// 09. Links externos: abre outro contexto e define isolamento da janela e referrer.
 function activateExternalLink(link, href) {
   link.href = href;
   link.target = '_blank';
   link.rel = 'noopener noreferrer';
 }
 
+// Reutiliza o link externo e acrescenta nome acessível e dica do ícone social.
 function activateSocialLink(link, href, label) {
   activateExternalLink(link, href);
   link.setAttribute('aria-label', label);
   link.title = label;
 }
 
+// 10. Bootstrap JS: recupera/cria o Carousel e fecha o Collapse após escolher um link.
 function initializeBootstrap() {
   if (!window.bootstrap) return;
 
@@ -372,6 +396,7 @@ function initializeBootstrap() {
   });
 }
 
+// CDN e alternativa local: carrega o JS de vendor apenas se window.bootstrap não existir.
 function loadBootstrap() {
   if (window.bootstrap) {
     initializeBootstrap();
@@ -384,11 +409,13 @@ function loadBootstrap() {
   document.head.appendChild(fallbackScript);
 }
 
+// 11. Consulta: codifica a mensagem para a URL e abre o WhatsApp; o usuário confirma o envio.
 function openWhatsApp(number, message) {
   const url = `https://wa.me/${number}?text=${encodeURIComponent(message)}`;
   window.open(url, '_blank', 'noopener,noreferrer');
 }
 
+// Atacado: habilita os botões e lê a mensagem registrada no atributo data-whatsapp-message.
 function initializeWholesaleWhatsApp(number) {
   document.querySelectorAll('[data-whatsapp-message]').forEach((button) => {
     button.disabled = false;
@@ -398,6 +425,7 @@ function initializeWholesaleWhatsApp(number) {
   });
 }
 
+// Formulário: valida os campos, reúne os valores com FormData e prepara a mensagem.
 function initializeContactForm(number) {
   const form = document.getElementById('form-contato');
   if (!form) return;
@@ -405,16 +433,19 @@ function initializeContactForm(number) {
   document.getElementById('form-note').textContent =
     'Ao continuar, a mensagem será preparada no WhatsApp. Confirme o envio no aplicativo.';
 
+  // preventDefault evita a navegação padrão; reportValidity verifica as regras do HTML.
   form.addEventListener('submit', (event) => {
     event.preventDefault();
     if (!form.reportValidity()) return;
 
+    // FormData usa os atributos name dos campos: nome, telefone, assunto e mensagem.
     const fields = new FormData(form);
     const message = `Olá! Meu nome é ${fields.get('nome')}.\nWhatsApp: ${fields.get('telefone')}\nAssunto: ${fields.get('assunto')}\nMensagem: ${fields.get('mensagem')}`;
     openWhatsApp(number, message);
   });
 }
 
+// Destinos compartilhados: normaliza o número, verifica seu formato e ativa os contatos.
 function initializeWhatsApp() {
   const number = STORE_CONFIG.whatsappNumber.replace(/\D/g, '');
   if (!/^\d{12,15}$/.test(number)) return;
@@ -429,6 +460,7 @@ function initializeWhatsApp() {
   initializeContactForm(number);
 }
 
+// 12. Instagram: valida o endereço e ativa o link do perfil; não carrega uma galeria/API.
 function initializeInstagram() {
   try {
     const instagram = new URL(STORE_CONFIG.instagramUrl);
@@ -445,6 +477,7 @@ function initializeInstagram() {
   }
 }
 
+// 13. Localização: atualiza textos e o botão de rotas; o iframe mantém seu src no HTML.
 function initializeLocation() {
   const address = STORE_CONFIG.address.trim();
   if (!address) return;
@@ -466,6 +499,7 @@ function initializeLocation() {
   });
 }
 
+// 14. Inicialização: executa os comportamentos depois de o HTML ter sido analisado (defer).
 loadBootstrap();
 renderProducts(STORE_CONFIG.whatsappNumber.replace(/\D/g, ''));
 renderProductDetail(STORE_CONFIG.whatsappNumber.replace(/\D/g, ''));

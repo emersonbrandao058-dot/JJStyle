@@ -1,3 +1,4 @@
+/* 01. Base visual: variáveis compartilhadas de cores e largura do conteúdo. */
 :root {
   --bg: #090b0f;
   --surface: #101315;
@@ -31,10 +32,12 @@ a:hover {
 section[id] {
   scroll-margin-top: 86px;
 }
+/* Container próprio: limita a largura, preserva margens laterais e centraliza. */
 .container-wide {
   width: min(calc(100% - 48px), var(--content-width));
   margin-inline: auto;
 }
+/* O atalho aparece ao receber foco e permite pular o menu pelo teclado. */
 .skip-link {
   position: fixed;
   z-index: 100;
@@ -47,12 +50,14 @@ section[id] {
 .skip-link:focus {
   top: 8px;
 }
+/* Foco visível: destaca o elemento operado por teclado. */
 :focus-visible {
   outline: 3px solid var(--orange);
   outline-offset: 3px;
 }
 
-/* Header */
+/* 02. Cabeçalho: personalização da Navbar Bootstrap, logo, menu e contato. */
+/* Cabeçalho no fluxo normal: position relative não fixa o elemento no scroll. */
 .site-header {
   position: relative;
   z-index: 20;
@@ -143,7 +148,8 @@ section[id] {
   background: var(--text);
 }
 
-/* Hero e carrossel */
+/* 03. Hero: dimensões, imagens e controles do Carousel Bootstrap. */
+/* clamp limita a altura entre mínimo e máximo, com valor fluido em vw. */
 .hero, .hero .carousel, .hero .carousel-inner, .hero .carousel-item {
   height: clamp(330px, 30.56vw, 500px);
 }
@@ -151,12 +157,14 @@ section[id] {
   position: relative;
   background: var(--bg);
 }
+/* cover preenche a área com possível recorte; object-position ajusta o enquadramento. */
 .hero-art {
   width: 100%;
   height: 100%;
   display: block;
   object-fit: cover;
 }
+/* Links absolutos alinham a área clicável à chamada desenhada no banner. */
 .hero-cta {
   position: absolute;
   z-index: 2;
@@ -233,7 +241,7 @@ section[id] {
   background: var(--orange);
 }
 
-/* Marcas */
+/* 04. Faixa de marcas: movimento contínuo feito com CSS próprio. */
 .brands {
   position: relative;
   height: 94px;
@@ -262,6 +270,7 @@ section[id] {
   outline: 2px solid var(--orange);
   outline-offset: -3px;
 }
+/* Os três grupos repetidos mantêm a faixa contínua; hover e foco pausam o movimento. */
 .brands-track {
   display: flex;
   width: max-content;
@@ -294,11 +303,12 @@ section[id] {
   height: auto;
   object-fit: contain;
 }
+/* Deslocar um terço do conjunto corresponde à largura de um dos três grupos. */
 @keyframes brands-scroll {
   to { transform: translateX(-33.3333333333%); }
 }
 
-/* Produtos da Home */
+/* 05. Vitrine da Home: CSS Grid próprio e personalização dos cards Bootstrap. */
 .products-section {
   padding: 38px 0 50px;
   border-top: 1px solid var(--line);
@@ -342,6 +352,7 @@ section[id] {
 .view-all span {
   margin-left: 5px;
 }
+/* Grade própria no desktop: quatro trilhas iguais; não utiliza col-* do Bootstrap. */
 .products-rail {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -389,6 +400,7 @@ section[id] {
 .product-card:hover .card-img-top, .product-card:focus-within .card-img-top {
   transform: scale(1.025);
 }
+/* Flexbox vertical organiza título, cores e ação no corpo do card. */
 .product-card .card-body {
   display: flex;
   flex-direction: column;
@@ -436,6 +448,7 @@ section[id] {
   cursor: pointer;
   transition: border-color .16s ease, box-shadow .16s ease;
 }
+/* A variável --swatch-fill vem do JavaScript: cor única ou gradiente de dois tons. */
 .product-option::before {
   content: '';
   position: absolute;
@@ -447,6 +460,7 @@ section[id] {
 .product-option:hover {
   border-color: #9da1a1;
 }
+/* O JavaScript atualiza aria-pressed; o CSS destaca a versão selecionada. */
 .product-option[aria-pressed="true"] {
   border-color: var(--orange);
   box-shadow: 0 0 0 1px rgba(236, 111, 36, .16);
@@ -502,7 +516,7 @@ section[id] {
   outline-offset: 2px;
 }
 
-/* Catálogo */
+/* 06. Catálogo: breadcrumb, títulos e grade dos seis modelos. */
 .catalog-section {
   min-height: 650px;
   padding: 54px 0 76px;
@@ -546,6 +560,7 @@ section[id] {
   font-size: 15px;
   line-height: 1.5;
 }
+/* Grade própria do catálogo: três colunas no desktop e regras específicas nas media queries. */
 .catalog-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -555,7 +570,7 @@ section[id] {
   height: 320px;
 }
 
-/* Página individual do produto */
+/* 07. Detalhe: imagem, informações, versões e estado de produto não encontrado. */
 .detail-section {
   min-height: 650px;
   padding: 40px 0 76px;
@@ -566,6 +581,7 @@ section[id] {
   flex-wrap: wrap;
   margin-bottom: 28px;
 }
+/* Grid distribui foto e texto em duas colunas; a regra mobile muda para uma. */
 .detail-grid {
   display: grid;
   grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr);
@@ -673,7 +689,7 @@ section[id] {
 .detail-not-found p {
   color: var(--muted);
 }
-/* Atacado e varejo */
+/* 08. Atacado e varejo: fotografia, conteúdo e botão de consulta. */
 .wholesale {
   display: grid;
   grid-template-columns: minmax(330px, 33%) 1fr;
@@ -760,7 +776,7 @@ section[id] {
   margin-left: 10px;
 }
 
-/* Sobre a loja */
+/* 09. Institucional: apresentação da loja em imagem e texto. */
 .about-section {
   padding: 58px 0;
   background: #0e1012;
@@ -845,12 +861,13 @@ section[id] {
   margin-left: 8px;
 }
 
-/* Contato e localização */
+/* 10. Contato: campos Bootstrap personalizados, mapa, redes sociais e rotas. */
 .contact-section {
   padding: 48px 0 0;
   border-block: 1px solid var(--line);
   background: #0a0b0d;
 }
+/* Grid próprio organiza formulário e mapa; dentro do formulário há row/col-* do Bootstrap. */
 .contact-grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
@@ -933,6 +950,7 @@ section[id] {
   border-radius: 12px;
   background: #131b20;
 }
+/* O iframe acompanha a largura e a altura do recipiente, sem borda padrão. */
 .map-embed iframe {
   display: block;
   width: 100%;
@@ -955,6 +973,7 @@ section[id] {
   align-items: center;
   gap: 12px;
 }
+/* Ícones sociais: cores locais, SVG e transições próprias de hover e foco. */
 .social-links .social-link {
   --social-color: var(--orange);
   --social-glow: rgba(255, 94, 18, .24);
@@ -1072,7 +1091,7 @@ section[id] {
   color: var(--orange);
 }
 
-/* Footer */
+/* 11. Rodapé: logo, links por assunto e informações da loja. */
 .site-footer {
   border-top: 1px solid var(--line);
   background: #060708;
@@ -1137,7 +1156,8 @@ section[id] {
   letter-spacing: .4px;
 }
 
-/* Acessibilidade e telas menores */
+/* 12. Acessibilidade e responsividade: preferências de movimento e faixas de tela. */
+/* Respeita a preferência por menos movimento nas animações definidas abaixo. */
 @media (prefers-reduced-motion: reduce) {
   .brands {
     overflow-x: auto;
@@ -1176,6 +1196,7 @@ section[id] {
   }
 }
 
+/* Abaixo de lg: adapta o menu recolhido pelo Collapse Bootstrap. */
 @media (max-width: 991.98px) {
   .site-nav, .nav-inner {
     min-height: 72px;
@@ -1208,6 +1229,7 @@ section[id] {
   }
 }
 
+/* Celular: artes e CTAs próprios; vitrine horizontal, catálogo e detalhe em uma coluna. */
 @media (max-width: 767.98px) {
   section[id] {
     scroll-margin-top: 72px;
@@ -1339,6 +1361,7 @@ section[id] {
     margin-top: 10px;
     padding: 5px 0;
   }
+  /* Home mobile: Flexbox e rolagem horizontal com encaixe dos cards (scroll-snap). */
   .products-rail {
     display: flex;
     gap: 16px;
@@ -1372,6 +1395,7 @@ section[id] {
   .catalog-heading p {
     font-size: 14px;
   }
+  /* Catálogo mobile: uma coluna; difere da vitrine horizontal da Home. */
   .catalog-grid {
     grid-template-columns: 1fr;
     gap: 20px;
@@ -1498,6 +1522,7 @@ section[id] {
   }
 }
 
+/* Tablet: duas colunas nas vitrines e ajustes de espaço no institucional e contato. */
 @media (min-width: 768px) and (max-width: 991.98px) {
   .products-rail, .catalog-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1529,6 +1554,7 @@ section[id] {
   }
 }
 
+/* Faixa intermediária: evita aperto entre texto e botão do bloco de atacado. */
 @media (min-width: 768px) and (max-width: 1199.98px) {
   .wholesale-content {
     padding-right: 24px;
@@ -1543,6 +1569,7 @@ section[id] {
   }
 }
 
+/* Ajuste do segundo banner e da área clicável no tablet. */
 @media (min-width: 768px) and (max-width: 990px) {
   .carousel-item:nth-child(2) .hero-art {
     object-fit: contain;
@@ -1555,6 +1582,7 @@ section[id] {
   }
 }
 
+/* Reposiciona os CTAs dos banners 1 e 3 na faixa intermediária. */
 @media (min-width: 768px) and (max-width: 1100px) {
   .hero-cta-one, .hero-cta-three {
     top: 68%;
