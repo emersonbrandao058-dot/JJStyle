@@ -61,6 +61,8 @@ Os módulos conversam por eventos próprios (`jj:favorites-change`, `jj:cart-cha
 
 ## Funcionalidades da Parte II
 
+- **Aviso acadêmico:** as três páginas exibem uma faixa laranja informando que a JJ Style é uma demonstração para a disciplina de Programação Front-End, sem vendas ou pagamentos reais. No primeiro acesso da aba, um preloader explica o contexto do projeto, permite entrada imediata e desaparece automaticamente. O código fica em `js/academic.js` e usa `sessionStorage` apenas para não repetir a abertura durante a navegação.
+
 - **Novos produtos:** Conjunto Nike Urban (preto e cinza), Conjunto New Balance Casual (bege e preto) e Conjunto Under Armour Active (verde-oliva e preto), com selo “Novo”. O banner “Novidades da semana” abre o catálogo já filtrado em Novidades.
 - **Favoritos:** coração nos cards e na página do produto; contador no header; o ícone do header abre `produtos.html?filtro=favoritos`. Ao remover um favorito dentro dessa lista, o foco do teclado vai para o card que ocupou o lugar (o próximo; se era o último, o anterior; se a lista esvaziou, para a mensagem de lista vazia).
 - **Busca e filtros:** a busca filtra a cada letra e ignora acentos e maiúsculas (“lilas” encontra “Lilás”). Há filtros rápidos (Todos, Novidades, Favoritos), marca, cor e ordenação. Ao filtrar por cor, o card já aparece na versão daquela cor. O estado vai para a URL (ex.: `produtos.html?marca=Puma&cor=Bege`). Atalhos: `/` foca a busca e `Esc` limpa. O link `produtos.html#busca` (ícone de lupa do header) já abre com o cursor na busca.
