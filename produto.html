@@ -7,12 +7,9 @@
     <meta name="description" content="Detalhes dos conjuntos da JJ Style. Consulte pelo WhatsApp.">
     <title>Produto | JJ Style</title>
     <link rel="icon" href="images/branding/favicon.png" type="image/png">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preload" href="vendor/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link href="vendor/bootstrap/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css?v=5">
+    <link rel="stylesheet" href="css/style.css?v=11">
   </head>
   <body>
     <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
@@ -20,8 +17,37 @@
       <nav class="navbar navbar-expand-lg site-nav" aria-label="Navegação principal">
         <div class="container-wide nav-inner">
           <a class="navbar-brand brand-link" href="index.html#inicio" aria-label="JJ Style, início">
-            <img src="images/branding/logo-jj-style.png" alt="JJ Style" width="700" height="663">
+            <img src="images/branding/logo-jj-style.webp" alt="JJ Style" width="700" height="663">
           </a>
+          <div class="nav-tools">
+            <a class="nav-icon" id="header-search" href="produtos.html#busca" aria-label="Buscar produtos" title="Buscar produtos">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="1.7"/>
+                <path d="m20 20-4.4-4.4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+              </svg>
+            </a>
+            <a class="nav-icon" id="header-favorites" href="produtos.html?filtro=favoritos" aria-label="Favoritos" title="Favoritos">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M12 20s-7.5-4.6-7.5-10.4A4.3 4.3 0 0 1 12 6.9a4.3 4.3 0 0 1 7.5 2.7C19.5 15.4 12 20 12 20Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+              </svg>
+              <span class="nav-badge" id="favorites-count" hidden></span>
+            </a>
+            <button
+              class="nav-icon"
+              id="header-cart"
+              type="button"
+              data-bs-toggle="offcanvas"
+              data-bs-target="#carrinho"
+              aria-controls="carrinho"
+              aria-label="Abrir carrinho"
+              title="Carrinho">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M5.5 8.5h13l-1.1 11.5H6.6L5.5 8.5Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+                <path d="M9 8.5V7a3 3 0 0 1 6 0v1.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+              </svg>
+              <span class="nav-badge" id="cart-count" hidden></span>
+            </button>
+          </div>
           <button
             class="navbar-toggler menu-toggle"
             type="button"
@@ -36,6 +62,7 @@
             <ul class="navbar-nav nav-links">
               <li class="nav-item"><a class="nav-link" href="index.html#inicio">Início</a></li>
               <li class="nav-item"><a class="nav-link" href="produtos.html">Produtos</a></li>
+              <li class="nav-item"><a class="nav-link" href="produtos.html?filtro=novidades">Novidades</a></li>
               <li class="nav-item"><a class="nav-link" href="index.html#sobre">Sobre</a></li>
             </ul>
             <a class="btn nav-contact" id="header-whatsapp" href="index.html#contato">Fale conosco <span aria-hidden="true">↗</span></a>
@@ -57,10 +84,13 @@
             </nav>
             <div class="detail-grid">
               <div class="detail-media">
-                <img id="detail-image" alt="" width="1086" height="1448">
+                <img id="detail-image" alt="" width="800" height="1067" decoding="async">
               </div>
               <div class="detail-info">
-                <p class="eyebrow">JJ Style</p>
+                <div class="detail-eyebrow">
+                  <p class="eyebrow" id="detail-brand">JJ Style</p>
+                  <span class="product-badge detail-badge" id="detail-badge" hidden>Novo</span>
+                </div>
                 <h1 id="detail-name"></h1>
                 <p class="detail-price">Preço sob consulta</p>
                 <div class="detail-colors">
@@ -68,7 +98,35 @@
                   <div id="detail-options" class="product-options" role="group"></div>
                   <p class="detail-selected">Cor selecionada: <span id="detail-color-name" aria-live="polite"></span></p>
                 </div>
-                <a id="detail-whatsapp" class="btn detail-whatsapp" target="_blank" rel="noopener noreferrer">Consultar no WhatsApp <span aria-hidden="true">↗</span></a>
+                <div class="detail-quantity">
+                  <label class="detail-label" for="detail-quantity">Quantidade</label>
+                  <div class="quantity-stepper quantity-stepper-lg">
+                    <button class="quantity-button" id="detail-decrease" type="button" aria-label="Diminuir quantidade">
+                      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 12h12" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+                    </button>
+                    <input class="quantity-input" id="detail-quantity" type="number" inputmode="numeric" min="1" max="99" value="1">
+                    <button class="quantity-button" id="detail-increase" type="button" aria-label="Aumentar quantidade">
+                      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 6v12M6 12h12" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+                    </button>
+                  </div>
+                </div>
+                <div class="detail-actions">
+                  <button class="btn orange-button detail-add" id="detail-add" type="button">
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <path d="M5.5 8.5h13l-1.1 11.5H6.6L5.5 8.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                      <path d="M9 8.5V7a3 3 0 0 1 6 0v1.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    </svg>
+                    Adicionar ao carrinho
+                  </button>
+                  <button class="favorite-toggle detail-favorite" id="detail-favorite" type="button" aria-pressed="false">
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <path d="M12 20s-7.5-4.6-7.5-10.4A4.3 4.3 0 0 1 12 6.9a4.3 4.3 0 0 1 7.5 2.7C19.5 15.4 12 20 12 20Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+                    </svg>
+                    <span class="favorite-label">Favoritar</span>
+                  </button>
+                </div>
+                <a id="detail-whatsapp" class="btn detail-whatsapp detail-whatsapp-secondary" target="_blank" rel="noopener noreferrer">Consultar agora no WhatsApp <span aria-hidden="true">↗</span></a>
+                <p class="detail-note">Os preços são sob consulta. Ao finalizar o carrinho, a loja recebe sua lista pelo WhatsApp e confirma valores, tamanhos e disponibilidade.</p>
                 <a class="detail-back" href="produtos.html">← Voltar ao catálogo</a>
               </div>
             </div>
@@ -80,12 +138,36 @@
           </div>
         </div>
       </section>
+      <section class="related-section" id="related-section" aria-labelledby="related-title" hidden>
+        <div class="container-wide">
+          <div class="section-head">
+            <div>
+              <h2 id="related-title">Você também pode gostar.</h2>
+              <p>Mais conjuntos da mesma marca e lançamentos da JJ Style.</p>
+            </div>
+            <a class="view-all" href="produtos.html">Ver todos <span aria-hidden="true">→</span></a>
+          </div>
+          <div class="products-rail" id="related-products" aria-label="Sugestões de produtos" tabindex="0"></div>
+        </div>
+      </section>
+      <section class="recent-section" id="recently-viewed" aria-labelledby="recent-title" hidden>
+        <div class="container-wide">
+          <div class="recent-head">
+            <div>
+              <p class="eyebrow">Seu histórico</p>
+              <h2 id="recent-title">Vistos recentemente.</h2>
+            </div>
+            <button class="recent-clear" id="recently-viewed-clear" type="button">Limpar histórico</button>
+          </div>
+          <div class="recent-list" id="recently-viewed-list"></div>
+        </div>
+      </section>
     </main>
 
     <footer class="site-footer">
       <div class="container-wide footer-main">
         <a class="footer-brand" href="index.html#inicio" aria-label="JJ Style, voltar ao início">
-          <img src="images/branding/logo-jj-style.png" alt="JJ Style" width="700" height="663" loading="lazy">
+          <img src="images/branding/logo-jj-style.webp" alt="JJ Style" width="700" height="663" loading="lazy">
         </a>
         <div class="footer-column">
           <h2>Links rápidos</h2>
@@ -110,7 +192,70 @@
         <p>Estilo • Atitude • Sempre com você</p>
       </div>
     </footer>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="js/main.js?v=3" defer></script>
+    <aside class="offcanvas offcanvas-end cart-drawer" tabindex="-1" id="carrinho" aria-labelledby="carrinho-titulo">
+      <div class="cart-header">
+        <div>
+          <p class="eyebrow">Seu pedido</p>
+          <h2 id="carrinho-titulo" tabindex="-1">Carrinho <span id="cart-heading-count"></span></h2>
+        </div>
+        <button class="cart-close" type="button" data-bs-dismiss="offcanvas" aria-label="Fechar carrinho">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+      <div class="cart-body">
+        <div class="cart-empty" id="cart-empty">
+          <span class="cart-empty-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M5.5 8.5h13l-1.1 11.5H6.6L5.5 8.5Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+              <path d="M9 8.5V7a3 3 0 0 1 6 0v1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </span>
+          <p class="cart-empty-title">Seu carrinho está vazio.</p>
+          <p>Escolha as cores e as quantidades e envie a lista completa pelo WhatsApp.</p>
+          <a class="btn outline-button" href="produtos.html">Ver produtos <span aria-hidden="true">→</span></a>
+        </div>
+        <ul class="cart-items" id="cart-items" aria-label="Produtos no carrinho" hidden></ul>
+        <div class="cart-details" id="cart-details" hidden>
+          <p class="cart-price-note">Preço sob consulta. A loja confirma valores, tamanhos e disponibilidade pelo WhatsApp.</p>
+          <label for="cart-name">Seu nome <span>(opcional)</span></label>
+          <input class="cart-field" id="cart-name" type="text" autocomplete="name" maxlength="60" placeholder="Como podemos chamar você?">
+          <label for="cart-notes">Observações <span>(opcional)</span></label>
+          <textarea class="cart-field" id="cart-notes" rows="3" maxlength="300" placeholder="Ex.: tamanhos M e G, retirada na loja..."></textarea>
+        </div>
+      </div>
+      <div class="cart-footer" id="cart-footer" hidden>
+        <div class="cart-summary">
+          <span>Total</span>
+          <strong id="cart-total">0 itens</strong>
+        </div>
+        <button class="cart-checkout" id="cart-checkout" type="button">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M5.2 17.8 3.8 21l3.5-1.2A9 9 0 1 0 5.2 17.8Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+            <path d="M8.2 7.8c.3-.4.6-.4.9-.4h.5c.2 0 .4.1.5.4l.8 1.9c.1.3.1.5-.1.7l-.7.9c.7 1.2 1.6 2.1 2.8 2.7l.9-.7c.2-.2.5-.2.7-.1l1.9.8c.3.1.4.3.4.5v.5c0 .4-.1.7-.4.9-.5.4-1.2.6-1.9.4-2.8-.7-5.3-3.1-6.4-5.8-.3-.8-.3-1.5.1-2.1Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
+          </svg>
+          Finalizar pelo WhatsApp
+        </button>
+        <button class="cart-clear" id="cart-clear" type="button">Esvaziar carrinho</button>
+      </div>
+    </aside>
+
+    <div class="jj-toast" id="jj-toast" hidden>
+      <span id="jj-toast-text"></span>
+      <button class="jj-toast-action" id="jj-toast-action" type="button" hidden></button>
+    </div>
+    <p class="visually-hidden" id="jj-live" role="status" aria-live="polite"></p>
+
+    <script src="vendor/bootstrap/bootstrap.bundle.min.js" defer></script>
+    <!-- Ordem importa: dados → armazenamento → interface → funcionalidades → inicialização. -->
+    <script src="js/data.js?v=6" defer></script>
+    <script src="js/storage.js?v=6" defer></script>
+    <script src="js/ui.js?v=6" defer></script>
+    <script src="js/favorites.js?v=6" defer></script>
+    <script src="js/cart.js?v=6" defer></script>
+    <script src="js/history.js?v=6" defer></script>
+    <script src="js/catalog.js?v=6" defer></script>
+    <script src="js/main.js?v=6" defer></script>
   </body>
 </html>
