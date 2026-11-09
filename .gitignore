@@ -1,1 +1,18 @@
+# Capturas de tela geradas durante a revisão
 screenshots/
+
+# Material da disciplina (enunciado do professor): fica só no computador do grupo
+docs/*.docx
+*.docx
+~$*
+
+# Dependências e resultados dos testes automatizados
+node_modules/
+tests/node_modules/
+tests/test-results/
+
+# Arquivos do sistema e de editores
+Thumbs.db
+.DS_Store
+.vscode/
+.vercel/

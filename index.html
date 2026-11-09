@@ -1,36 +1,53 @@
 <!doctype html>
 <html lang="pt-BR">
   <head>
-    <!-- 01. Metadados: idioma, acentos, viewport responsivo e identificação da página. -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#090b0f">
     <meta name="description" content="JJ Style: moda masculina, produtos e atendimento para atacado e varejo.">
     <title>JJ Style | Moda masculina</title>
     <link rel="icon" href="images/branding/favicon.png" type="image/png">
-    <!-- Fonte externa: preconnect antecipa a conexão; Archivo define a tipografia. -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- Bootstrap 5.3.8: CSS de componentes. A cópia local também é carregada abaixo. -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preload" href="vendor/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link href="vendor/bootstrap/bootstrap.min.css" rel="stylesheet">
-    <!-- CSS próprio vem depois para personalizar os componentes; o parâmetro v diferencia a URL no cache. -->
-    <link rel="stylesheet" href="css/style.css?v=8">
+    <link rel="stylesheet" href="css/style.css?v=11">
   </head>
   <body>
-    <!-- Acessibilidade: permite pular a navegação e chegar ao conteúdo pelo teclado. -->
     <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
-    <!-- 02. Cabeçalho compartilhado: logo, navegação e contato. -->
     <header class="site-header" id="inicio">
-      <!-- Bootstrap Navbar: menu expandido a partir de lg (992 px); site-nav é estilo próprio. -->
       <nav class="navbar navbar-expand-lg site-nav" aria-label="Navegação principal">
-        <!-- container-wide e nav-inner são classes próprias, não containers do Bootstrap. -->
         <div class="container-wide nav-inner">
           <a class="navbar-brand brand-link" href="#inicio" aria-label="JJ Style, início">
-            <img src="images/branding/logo-jj-style.png" alt="JJ Style" width="700" height="663">
+            <img src="images/branding/logo-jj-style.webp" alt="JJ Style" width="700" height="663">
           </a>
-          <!-- Bootstrap Collapse: o botão controla o elemento indicado em data-bs-target. -->
+          <div class="nav-tools">
+            <a class="nav-icon" id="header-search" href="produtos.html#busca" aria-label="Buscar produtos" title="Buscar produtos">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="1.7"/>
+                <path d="m20 20-4.4-4.4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+              </svg>
+            </a>
+            <a class="nav-icon" id="header-favorites" href="produtos.html?filtro=favoritos" aria-label="Favoritos" title="Favoritos">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M12 20s-7.5-4.6-7.5-10.4A4.3 4.3 0 0 1 12 6.9a4.3 4.3 0 0 1 7.5 2.7C19.5 15.4 12 20 12 20Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+              </svg>
+              <span class="nav-badge" id="favorites-count" hidden></span>
+            </a>
+            <button
+              class="nav-icon"
+              id="header-cart"
+              type="button"
+              data-bs-toggle="offcanvas"
+              data-bs-target="#carrinho"
+              aria-controls="carrinho"
+              aria-label="Abrir carrinho"
+              title="Carrinho">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M5.5 8.5h13l-1.1 11.5H6.6L5.5 8.5Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+                <path d="M9 8.5V7a3 3 0 0 1 6 0v1.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+              </svg>
+              <span class="nav-badge" id="cart-count" hidden></span>
+            </button>
+          </div>
           <button
             class="navbar-toggler menu-toggle"
             type="button"
@@ -41,11 +58,11 @@
             aria-label="Abrir menu">
             <span class="navbar-toggler-icon"></span>
           </button>
-          <!-- O id precisa corresponder ao alvo do botão; aria-expanded informa seu estado. -->
           <div class="collapse navbar-collapse" id="menu-principal">
             <ul class="navbar-nav nav-links">
-              <li class="nav-item"><a class="nav-link" href="#inicio">Início</a></li>
-              <li class="nav-item"><a class="nav-link" href="#produtos">Produtos</a></li>
+              <li class="nav-item"><a class="nav-link" href="produtos.html">Produtos</a></li>
+              <li class="nav-item"><a class="nav-link" href="produtos.html?filtro=novidades">Novidades</a></li>
+              <li class="nav-item"><a class="nav-link" href="#atacado">Atacado</a></li>
               <li class="nav-item"><a class="nav-link" href="#sobre">Sobre</a></li>
             </ul>
             <a class="btn nav-contact" id="header-whatsapp" href="#contato">Fale conosco <span aria-hidden="true">↗</span></a>
@@ -54,13 +71,9 @@
       </nav>
     </header>
 
-    <!-- 03. Conteúdo principal: seções da página e pontos preenchidos pelo JavaScript. -->
     <main id="conteudo">
-      <!-- Hierarquia: h1 descreve a página; visually-hidden é uma utilidade do Bootstrap. -->
       <h1 class="visually-hidden">JJ Style — moda masculina</h1>
-      <!-- HOME A. Hero: três banners com links para produtos ou atacado. -->
       <section class="hero" aria-label="Destaques da JJ Style">
-        <!-- Bootstrap Carousel: data-bs-ride ativa a alternância; 6000 ms equivalem a 6 segundos. -->
         <div
           id="carousel-destaques"
           class="carousel slide"
@@ -68,32 +81,33 @@
           data-bs-interval="6000"
           aria-roledescription="carrossel">
           <div class="carousel-inner">
-            <!-- active indica o primeiro banner. picture escolhe a arte mobile pela media query. -->
             <div class="carousel-item active">
               <picture>
-                <source media="(max-width: 767px)" srcset="images/banners/banner-01-atitude-mobile.png">
+                <source media="(max-width: 767px)" srcset="images/banners/banner-01-atitude-mobile.webp">
                 <img
                   class="hero-art"
-                  src="images/banners/banner-01-atitude-desktop.png"
+                  src="images/banners/banner-01-atitude-desktop.webp"
                   alt="Vista sua atitude. Moda masculina para o seu dia a dia."
-                  width="1916"
-                  height="821"
-                  fetchpriority="high">
+                  width="1600"
+                  height="686"
+                  fetchpriority="high"
+                  decoding="async">
               </picture>
-              <!-- Link real sobre a chamada da arte; o CSS ajusta sua área clicável por tela. -->
               <a class="hero-cta hero-cta-one" href="#produtos" aria-label="Conheça os produtos da JJ Style">
                 <span class="hero-mobile-action" aria-hidden="true">Ver produtos <span>→</span></span>
               </a>
             </div>
             <div class="carousel-item">
               <picture>
-                <source media="(max-width: 767px)" srcset="images/banners/banner-02-atacado-mobile.png">
+                <source media="(max-width: 767px)" srcset="images/banners/banner-02-atacado-mobile.webp">
                 <img
                   class="hero-art"
-                  src="images/banners/banner-02-atacado-desktop.png"
+                  src="images/banners/banner-02-atacado-desktop.webp"
                   alt="Atacado e varejo. Peças para você ou para o seu negócio."
-                  width="2172"
-                  height="724">
+                  width="1600"
+                  height="533"
+                  fetchpriority="low"
+                  decoding="async">
               </picture>
               <a class="hero-cta hero-cta-two" href="#atacado" aria-label="Faça seu pedido">
                 <span class="hero-mobile-action" aria-hidden="true">Faça seu pedido <span>→</span></span>
@@ -101,20 +115,21 @@
             </div>
             <div class="carousel-item">
               <picture>
-                <source media="(max-width: 767px)" srcset="images/banners/banner-03-novidades-mobile.png">
+                <source media="(max-width: 767px)" srcset="images/banners/banner-03-novidades-mobile.webp">
                 <img
                   class="hero-art"
-                  src="images/banners/banner-03-novidades-desktop.png"
+                  src="images/banners/banner-03-novidades-desktop.webp"
                   alt="Novidades da semana. Looks novos para atualizar o visual."
-                  width="1916"
-                  height="821">
+                  width="1600"
+                  height="686"
+                  fetchpriority="low"
+                  decoding="async">
               </picture>
-              <a class="hero-cta hero-cta-three" href="#produtos" aria-label="Ver produtos da semana">
+              <a class="hero-cta hero-cta-three" href="produtos.html?filtro=novidades" aria-label="Ver as novidades da semana">
                 <span class="hero-mobile-action" aria-hidden="true">Ver produtos <span>→</span></span>
               </a>
             </div>
           </div>
-          <!-- Controles Bootstrap: prev/next mudam o item do carrossel indicado no alvo. -->
           <button
             class="carousel-control-prev hero-control"
             type="button"
@@ -131,7 +146,6 @@
             aria-label="Próximo banner">
             <span aria-hidden="true">›</span>
           </button>
-          <!-- Indicadores: data-bs-slide-to usa índices a partir de zero. -->
           <div class="carousel-indicators hero-indicators">
             <button
               type="button"
@@ -156,73 +170,71 @@
           </div>
         </div>
       </section>
-      <!-- HOME B. Marcas: o CSS move três grupos; cópias decorativas ficam ocultas para leitores de tela. -->
       <section class="brands" aria-label="Marcas disponíveis na JJ Style" tabindex="0">
         <div class="brands-track">
           <div class="brands-group">
             <span class="brand-slot">
-              <img src="images/brands/marca-puma.png" alt="Puma" width="2416" height="1220" loading="lazy">
+              <img src="images/brands/marca-puma.webp" alt="Puma" width="2416" height="1220" loading="lazy">
             </span>
             <span class="brand-slot">
-              <img src="images/brands/marca-nike.png" alt="Nike" width="2394" height="1250" loading="lazy">
+              <img src="images/brands/marca-nike.webp" alt="Nike" width="2394" height="1250" loading="lazy">
             </span>
             <span class="brand-slot">
-              <img src="images/brands/marca-lacoste.png" alt="Lacoste" width="2072" height="1472" loading="lazy">
+              <img src="images/brands/marca-lacoste.webp" alt="Lacoste" width="2072" height="1472" loading="lazy">
             </span>
             <span class="brand-slot">
-              <img src="images/brands/marca-adidas.png" alt="Adidas" width="2300" height="1586" loading="lazy">
+              <img src="images/brands/marca-adidas.webp" alt="Adidas" width="2300" height="1586" loading="lazy">
             </span>
             <span class="brand-slot">
-              <img src="images/brands/marca-seaway.png" alt="Seaway" width="2238" height="330" loading="lazy">
+              <img src="images/brands/marca-seaway.webp" alt="Seaway" width="2238" height="330" loading="lazy">
             </span>
             <span class="brand-slot">
-              <img src="images/brands/marca-quiksilver.png" alt="Quiksilver" width="3778" height="696" loading="lazy">
+              <img src="images/brands/marca-quiksilver.webp" alt="Quiksilver" width="3778" height="696" loading="lazy">
             </span>
           </div>
           <!-- Cópia decorativa para manter o movimento contínuo. -->
           <div class="brands-group" aria-hidden="true">
             <span class="brand-slot">
-              <img src="images/brands/marca-puma.png" alt="" width="2416" height="1220" loading="lazy">
+              <img src="images/brands/marca-puma.webp" alt="" width="2416" height="1220" loading="lazy">
             </span>
             <span class="brand-slot">
-              <img src="images/brands/marca-nike.png" alt="" width="2394" height="1250" loading="lazy">
+              <img src="images/brands/marca-nike.webp" alt="" width="2394" height="1250" loading="lazy">
             </span>
             <span class="brand-slot">
-              <img src="images/brands/marca-lacoste.png" alt="" width="2072" height="1472" loading="lazy">
+              <img src="images/brands/marca-lacoste.webp" alt="" width="2072" height="1472" loading="lazy">
             </span>
             <span class="brand-slot">
-              <img src="images/brands/marca-adidas.png" alt="" width="2300" height="1586" loading="lazy">
+              <img src="images/brands/marca-adidas.webp" alt="" width="2300" height="1586" loading="lazy">
             </span>
             <span class="brand-slot">
-              <img src="images/brands/marca-seaway.png" alt="" width="2238" height="330" loading="lazy">
+              <img src="images/brands/marca-seaway.webp" alt="" width="2238" height="330" loading="lazy">
             </span>
             <span class="brand-slot">
-              <img src="images/brands/marca-quiksilver.png" alt="" width="3778" height="696" loading="lazy">
+              <img src="images/brands/marca-quiksilver.webp" alt="" width="3778" height="696" loading="lazy">
             </span>
           </div>
           <div class="brands-group" aria-hidden="true">
             <span class="brand-slot">
-              <img src="images/brands/marca-puma.png" alt="" width="2416" height="1220" loading="lazy">
+              <img src="images/brands/marca-puma.webp" alt="" width="2416" height="1220" loading="lazy">
             </span>
             <span class="brand-slot">
-              <img src="images/brands/marca-nike.png" alt="" width="2394" height="1250" loading="lazy">
+              <img src="images/brands/marca-nike.webp" alt="" width="2394" height="1250" loading="lazy">
             </span>
             <span class="brand-slot">
-              <img src="images/brands/marca-lacoste.png" alt="" width="2072" height="1472" loading="lazy">
+              <img src="images/brands/marca-lacoste.webp" alt="" width="2072" height="1472" loading="lazy">
             </span>
             <span class="brand-slot">
-              <img src="images/brands/marca-adidas.png" alt="" width="2300" height="1586" loading="lazy">
+              <img src="images/brands/marca-adidas.webp" alt="" width="2300" height="1586" loading="lazy">
             </span>
             <span class="brand-slot">
-              <img src="images/brands/marca-seaway.png" alt="" width="2238" height="330" loading="lazy">
+              <img src="images/brands/marca-seaway.webp" alt="" width="2238" height="330" loading="lazy">
             </span>
             <span class="brand-slot">
-              <img src="images/brands/marca-quiksilver.png" alt="" width="3778" height="696" loading="lazy">
+              <img src="images/brands/marca-quiksilver.webp" alt="" width="3778" height="696" loading="lazy">
             </span>
           </div>
         </div>
       </section>
-      <!-- HOME C. Vitrine: main.js seleciona quatro modelos do array PRODUCTS. -->
       <section class="products-section" id="produtos" aria-labelledby="produtos-titulo">
         <div class="container-wide">
           <div class="section-head">
@@ -232,19 +244,30 @@
             </div>
             <a class="view-all" id="ver-todos" href="produtos.html">Ver todos <span aria-hidden="true">→</span></a>
           </div>
-          <!-- data-product-list conecta este recipiente à renderProducts; a grade usa CSS próprio. -->
           <div class="products-rail" id="lista-produtos" aria-label="Produtos da JJ Style" tabindex="0" data-product-list="home"></div>
         </div>
       </section>
-      <!-- HOME D. Atacado: data-whatsapp-message guarda o texto lido pelo JavaScript. -->
+      <section class="recent-section" id="recently-viewed" aria-labelledby="recent-title" hidden>
+        <div class="container-wide">
+          <div class="recent-head">
+            <div>
+              <p class="eyebrow">Seu histórico</p>
+              <h2 id="recent-title">Vistos recentemente.</h2>
+            </div>
+            <button class="recent-clear" id="recently-viewed-clear" type="button">Limpar histórico</button>
+          </div>
+          <div class="recent-list" id="recently-viewed-list"></div>
+        </div>
+      </section>
       <section class="wholesale" id="atacado" aria-labelledby="atacado-titulo">
         <div class="wholesale-media">
           <img
-            src="images/banners/banner-02-atacado-mobile.png"
+            src="images/banners/banner-02-atacado-mobile.webp"
             alt="Conjuntos esportivos e calçados disponíveis na JJ Style"
-            width="1122"
-            height="1402"
-            loading="lazy">
+            width="900"
+            height="1125"
+            loading="lazy"
+            decoding="async">
         </div>
         <div class="wholesale-content">
           <div class="wholesale-copy">
@@ -260,16 +283,16 @@
           </button>
         </div>
       </section>
-      <!-- HOME E. Apresentação da loja: fotografia, informações e link para contato. -->
       <section class="about-section" id="sobre" aria-labelledby="sobre-titulo">
         <div class="container-wide about-grid">
           <div class="about-photo">
             <img
-              src="images/loja/loja-jj-style.png"
+              src="images/loja/loja-jj-style.webp"
               alt="Interior da loja JJ Style com roupas expostas"
-              width="1292"
-              height="1218"
-              loading="lazy">
+              width="900"
+              height="848"
+              loading="lazy"
+              decoding="async">
           </div>
           <div class="about-card">
             <p class="eyebrow">Conheça a JJ Style.</p>
@@ -283,19 +306,15 @@
           </div>
         </div>
       </section>
-      <!-- HOME F. Contato e localização: formulário, mapa, redes sociais e rotas. -->
       <section class="contact-section" id="contato" aria-label="Contato e localização">
         <div class="container-wide">
           <div class="contact-grid">
             <div class="contact-column">
               <h2>Ficou com alguma dúvida?</h2>
               <p class="contact-intro">Nossa equipe está pronta para atender você. Entre em contato para dúvidas, pedidos ou orçamento.</p>
-              <!-- O JS intercepta submit e prepara a mensagem; o usuário confirma o envio no WhatsApp. -->
               <form id="form-contato">
-                <!-- Grid Bootstrap: 12 colunas; col-md-6 usa metade a partir de 768 px; g-3 dá espaçamento. -->
                 <div class="row g-3">
                   <div class="col-md-6">
-                    <!-- for liga o rótulo ao id; name identifica o valor no FormData; required exige preenchimento. -->
                     <label class="form-label" for="nome">Nome completo</label>
                     <input class="form-control" id="nome" name="nome" type="text" autocomplete="name" placeholder="Seu nome" required>
                   </div>
@@ -339,7 +358,6 @@
                 <strong>Feira de Santana, BA</strong>
                 <span id="address-text">Confira a localização no mapa abaixo.</span>
               </div>
-              <!-- Mapa incorporado: iframe externo com src fixo; STORE_CONFIG não altera este src. -->
               <div class="map-embed">
                 <iframe
                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3898.3223492205793!2d-38.954679825703096!3d-12.294065346552946!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x714365a3df8dd87%3A0x8ea0f89ca43a7433!2sR.%20Comendador%20Gomes%2C%20483%20-%20Parque%20Panorama%2C%20Feira%20de%20Santana%20-%20BA%2C%2044091-238!5e0!3m2!1spt-BR!2sbr!4v1790253158107!5m2!1spt-BR!2sbr"
@@ -348,7 +366,6 @@
                   loading="lazy"
                   referrerpolicy="strict-origin-when-cross-origin"></iframe>
               </div>
-              <!-- Ícones SVG e efeitos em CSS próprio; main.js valida e define os destinos dos links. -->
               <div class="contact-socials">
                 <p>Redes sociais</p>
                 <div class="social-links" aria-label="Redes sociais da JJ Style">
@@ -397,7 +414,6 @@
                   </a>
                 </div>
               </div>
-              <!-- Rotas: initializeLocation habilita o botão e pesquisa o endereço configurado. -->
               <div class="location-actions">
                 <button class="location-action" id="route-button" type="button" disabled>Ver rotas <span aria-hidden="true">↗</span>
                 </button>
@@ -412,11 +428,10 @@
         </div>
       </section>
     </main>
-    <!-- 04. Rodapé compartilhado: navegação, atendimento e endereço vindo de STORE_CONFIG. -->
     <footer class="site-footer">
       <div class="container-wide footer-main">
         <a class="footer-brand" href="#inicio" aria-label="JJ Style, voltar ao início">
-          <img src="images/branding/logo-jj-style.png" alt="JJ Style" width="700" height="663" loading="lazy">
+          <img src="images/branding/logo-jj-style.webp" alt="JJ Style" width="700" height="663" loading="lazy">
         </a>
         <div class="footer-column">
           <h2>Links rápidos</h2>
@@ -441,9 +456,70 @@
         <p>Estilo • Atitude • Sempre com você</p>
       </div>
     </footer>
-    <!-- 05. Bootstrap JS: comportamentos de Collapse e Carousel. main.js tenta a cópia local se necessário. -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Script próprio: defer espera o HTML ser analisado antes de montar produtos e ativar contatos. -->
-    <script src="js/main.js?v=3" defer></script>
+    <aside class="offcanvas offcanvas-end cart-drawer" tabindex="-1" id="carrinho" aria-labelledby="carrinho-titulo">
+      <div class="cart-header">
+        <div>
+          <p class="eyebrow">Seu pedido</p>
+          <h2 id="carrinho-titulo" tabindex="-1">Carrinho <span id="cart-heading-count"></span></h2>
+        </div>
+        <button class="cart-close" type="button" data-bs-dismiss="offcanvas" aria-label="Fechar carrinho">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+      <div class="cart-body">
+        <div class="cart-empty" id="cart-empty">
+          <span class="cart-empty-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M5.5 8.5h13l-1.1 11.5H6.6L5.5 8.5Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+              <path d="M9 8.5V7a3 3 0 0 1 6 0v1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </span>
+          <p class="cart-empty-title">Seu carrinho está vazio.</p>
+          <p>Escolha as cores e as quantidades e envie a lista completa pelo WhatsApp.</p>
+          <a class="btn outline-button" href="produtos.html">Ver produtos <span aria-hidden="true">→</span></a>
+        </div>
+        <ul class="cart-items" id="cart-items" aria-label="Produtos no carrinho" hidden></ul>
+        <div class="cart-details" id="cart-details" hidden>
+          <p class="cart-price-note">Preço sob consulta. A loja confirma valores, tamanhos e disponibilidade pelo WhatsApp.</p>
+          <label for="cart-name">Seu nome <span>(opcional)</span></label>
+          <input class="cart-field" id="cart-name" type="text" autocomplete="name" maxlength="60" placeholder="Como podemos chamar você?">
+          <label for="cart-notes">Observações <span>(opcional)</span></label>
+          <textarea class="cart-field" id="cart-notes" rows="3" maxlength="300" placeholder="Ex.: tamanhos M e G, retirada na loja..."></textarea>
+        </div>
+      </div>
+      <div class="cart-footer" id="cart-footer" hidden>
+        <div class="cart-summary">
+          <span>Total</span>
+          <strong id="cart-total">0 itens</strong>
+        </div>
+        <button class="cart-checkout" id="cart-checkout" type="button">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M5.2 17.8 3.8 21l3.5-1.2A9 9 0 1 0 5.2 17.8Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+            <path d="M8.2 7.8c.3-.4.6-.4.9-.4h.5c.2 0 .4.1.5.4l.8 1.9c.1.3.1.5-.1.7l-.7.9c.7 1.2 1.6 2.1 2.8 2.7l.9-.7c.2-.2.5-.2.7-.1l1.9.8c.3.1.4.3.4.5v.5c0 .4-.1.7-.4.9-.5.4-1.2.6-1.9.4-2.8-.7-5.3-3.1-6.4-5.8-.3-.8-.3-1.5.1-2.1Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
+          </svg>
+          Finalizar pelo WhatsApp
+        </button>
+        <button class="cart-clear" id="cart-clear" type="button">Esvaziar carrinho</button>
+      </div>
+    </aside>
+
+    <div class="jj-toast" id="jj-toast" hidden>
+      <span id="jj-toast-text"></span>
+      <button class="jj-toast-action" id="jj-toast-action" type="button" hidden></button>
+    </div>
+    <p class="visually-hidden" id="jj-live" role="status" aria-live="polite"></p>
+
+    <script src="vendor/bootstrap/bootstrap.bundle.min.js" defer></script>
+    <!-- Ordem importa: dados → armazenamento → interface → funcionalidades → inicialização. -->
+    <script src="js/data.js?v=6" defer></script>
+    <script src="js/storage.js?v=6" defer></script>
+    <script src="js/ui.js?v=6" defer></script>
+    <script src="js/favorites.js?v=6" defer></script>
+    <script src="js/cart.js?v=6" defer></script>
+    <script src="js/history.js?v=6" defer></script>
+    <script src="js/catalog.js?v=6" defer></script>
+    <script src="js/main.js?v=6" defer></script>
   </body>
 </html>

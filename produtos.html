@@ -1,36 +1,53 @@
 <!doctype html>
 <html lang="pt-BR">
   <head>
-    <!-- 01. Metadados: idioma, acentos, viewport responsivo e identificação da página. -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#090b0f">
     <meta name="description" content="Produtos de moda masculina da JJ Style. Consulte preços pelo WhatsApp.">
     <title>Produtos | JJ Style</title>
     <link rel="icon" href="images/branding/favicon.png" type="image/png">
-    <!-- Fonte externa: preconnect antecipa a conexão; Archivo define a tipografia. -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- Bootstrap 5.3.8: CSS de componentes. A cópia local também é carregada abaixo. -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preload" href="vendor/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link href="vendor/bootstrap/bootstrap.min.css" rel="stylesheet">
-    <!-- CSS próprio vem depois para personalizar os componentes; o parâmetro v diferencia a URL no cache. -->
-    <link rel="stylesheet" href="css/style.css?v=5">
+    <link rel="stylesheet" href="css/style.css?v=11">
   </head>
   <body>
-    <!-- Acessibilidade: permite pular a navegação e chegar ao conteúdo pelo teclado. -->
     <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
-    <!-- 02. Cabeçalho compartilhado: logo, navegação e contato. -->
     <header class="site-header" id="inicio">
-      <!-- Bootstrap Navbar: menu expandido a partir de lg (992 px); site-nav é estilo próprio. -->
       <nav class="navbar navbar-expand-lg site-nav" aria-label="Navegação principal">
-        <!-- container-wide e nav-inner são classes próprias, não containers do Bootstrap. -->
         <div class="container-wide nav-inner">
           <a class="navbar-brand brand-link" href="index.html#inicio" aria-label="JJ Style, início">
-            <img src="images/branding/logo-jj-style.png" alt="JJ Style" width="700" height="663">
+            <img src="images/branding/logo-jj-style.webp" alt="JJ Style" width="700" height="663">
           </a>
-          <!-- Bootstrap Collapse: o botão controla o elemento indicado em data-bs-target. -->
+          <div class="nav-tools">
+            <a class="nav-icon" id="header-search" href="produtos.html#busca" aria-label="Buscar produtos" title="Buscar produtos">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="1.7"/>
+                <path d="m20 20-4.4-4.4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+              </svg>
+            </a>
+            <a class="nav-icon" id="header-favorites" href="produtos.html?filtro=favoritos" aria-label="Favoritos" title="Favoritos">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M12 20s-7.5-4.6-7.5-10.4A4.3 4.3 0 0 1 12 6.9a4.3 4.3 0 0 1 7.5 2.7C19.5 15.4 12 20 12 20Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+              </svg>
+              <span class="nav-badge" id="favorites-count" hidden></span>
+            </a>
+            <button
+              class="nav-icon"
+              id="header-cart"
+              type="button"
+              data-bs-toggle="offcanvas"
+              data-bs-target="#carrinho"
+              aria-controls="carrinho"
+              aria-label="Abrir carrinho"
+              title="Carrinho">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M5.5 8.5h13l-1.1 11.5H6.6L5.5 8.5Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+                <path d="M9 8.5V7a3 3 0 0 1 6 0v1.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+              </svg>
+              <span class="nav-badge" id="cart-count" hidden></span>
+            </button>
+          </div>
           <button
             class="navbar-toggler menu-toggle"
             type="button"
@@ -41,11 +58,10 @@
             aria-label="Abrir menu">
             <span class="navbar-toggler-icon"></span>
           </button>
-          <!-- O id precisa corresponder ao alvo do botão; aria-expanded informa seu estado. -->
           <div class="collapse navbar-collapse" id="menu-principal">
             <ul class="navbar-nav nav-links">
               <li class="nav-item"><a class="nav-link" href="index.html#inicio">Início</a></li>
-              <li class="nav-item"><a class="nav-link" href="produtos.html" aria-current="page">Produtos</a></li>
+              <li class="nav-item"><a class="nav-link" href="produtos.html?filtro=novidades">Novidades</a></li>
               <li class="nav-item"><a class="nav-link" href="index.html#sobre">Sobre</a></li>
             </ul>
             <a class="btn nav-contact" id="header-whatsapp" href="index.html#contato">Fale conosco <span aria-hidden="true">↗</span></a>
@@ -54,9 +70,7 @@
       </nav>
     </header>
 
-    <!-- 03. Conteúdo principal: seções da página e pontos preenchidos pelo JavaScript. -->
     <main id="conteudo">
-      <!-- CATÁLOGO A. Título e breadcrumb: indicam a posição do visitante e o retorno à Home. -->
       <section class="catalog-section" id="produtos" aria-labelledby="catalogo-titulo">
         <div class="container-wide">
           <div class="catalog-heading">
@@ -66,19 +80,98 @@
               <span aria-current="page">Produtos</span>
             </nav>
             <h1 id="catalogo-titulo">Produtos.</h1>
-            <p>Conheça os conjuntos da JJ Style e consulte os preços pelo WhatsApp.</p>
+            <p>Busque por marca, modelo ou cor, monte seu carrinho e consulte os preços pelo WhatsApp.</p>
           </div>
-          <!-- CATÁLOGO B. renderProducts monta os seis cards aqui; catalog-grid usa CSS Grid próprio. -->
-          <div class="catalog-grid" aria-label="Produtos da JJ Style" data-product-list="catalog"></div>
+
+          <div class="catalog-toolbar" id="busca">
+            <div class="catalog-search" role="search">
+              <label class="visually-hidden" for="catalog-search">Buscar produtos</label>
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="1.7"/>
+                <path d="m20 20-4.4-4.4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+              </svg>
+              <input
+                id="catalog-search"
+                type="search"
+                placeholder="Marca, modelo ou cor"
+                autocomplete="off"
+                enterkeyhint="search"
+                aria-describedby="catalog-count">
+              <kbd class="catalog-search-key" aria-hidden="true">/</kbd>
+              <button class="catalog-search-clear" id="catalog-search-clear" type="button" aria-label="Limpar busca" hidden>
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M7 7l10 10M17 7 7 17" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                </svg>
+              </button>
+            </div>
+            <div class="catalog-selects">
+              <label class="catalog-select">
+                <span>Marca</span>
+                <select id="filter-brand">
+                  <option value="todas">Todas</option>
+                </select>
+              </label>
+              <label class="catalog-select">
+                <span>Cor</span>
+                <select id="filter-color">
+                  <option value="todas">Todas</option>
+                </select>
+              </label>
+              <label class="catalog-select">
+                <span>Ordenar</span>
+                <select id="catalog-sort">
+                  <option value="destaques">Destaques</option>
+                  <option value="nome-az">Nome (A–Z)</option>
+                  <option value="nome-za">Nome (Z–A)</option>
+                  <option value="marca">Marca</option>
+                </select>
+              </label>
+            </div>
+            <div class="catalog-chips" role="group" aria-label="Filtros rápidos">
+              <button class="filter-chip" type="button" data-quick-filter="todos" aria-pressed="true">Todos</button>
+              <button class="filter-chip" type="button" data-quick-filter="novidades" aria-pressed="false">Novidades</button>
+              <button class="filter-chip" type="button" data-quick-filter="favoritos" aria-pressed="false">
+                Favoritos <span class="chip-count" id="chip-favorites-count"></span>
+              </button>
+            </div>
+            <div class="catalog-status">
+              <p id="catalog-count" aria-live="polite"></p>
+              <button class="catalog-clear" id="catalog-clear" type="button" hidden>Limpar filtros</button>
+            </div>
+          </div>
+
+          <div class="catalog-grid" id="catalog-grid" aria-label="Produtos da JJ Style"></div>
+          <div class="catalog-empty" id="catalog-empty" hidden>
+            <span class="catalog-empty-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none">
+                <circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="1.5"/>
+                <path d="m20 20-4.4-4.4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </span>
+            <h2 id="catalog-empty-title" tabindex="-1">Nenhum produto encontrado.</h2>
+            <p id="catalog-empty-text">Tente buscar por outra marca, modelo ou cor, ou limpe os filtros.</p>
+            <button class="btn outline-button" id="catalog-empty-clear" type="button">Ver todos os produtos</button>
+          </div>
+        </div>
+      </section>
+      <section class="recent-section" id="recently-viewed" aria-labelledby="recent-title" hidden>
+        <div class="container-wide">
+          <div class="recent-head">
+            <div>
+              <p class="eyebrow">Seu histórico</p>
+              <h2 id="recent-title">Vistos recentemente.</h2>
+            </div>
+            <button class="recent-clear" id="recently-viewed-clear" type="button">Limpar histórico</button>
+          </div>
+          <div class="recent-list" id="recently-viewed-list"></div>
         </div>
       </section>
     </main>
 
-    <!-- 04. Rodapé compartilhado: navegação, atendimento e endereço vindo de STORE_CONFIG. -->
     <footer class="site-footer">
       <div class="container-wide footer-main">
         <a class="footer-brand" href="index.html#inicio" aria-label="JJ Style, voltar ao início">
-          <img src="images/branding/logo-jj-style.png" alt="JJ Style" width="700" height="663" loading="lazy">
+          <img src="images/branding/logo-jj-style.webp" alt="JJ Style" width="700" height="663" loading="lazy">
         </a>
         <div class="footer-column">
           <h2>Links rápidos</h2>
@@ -103,9 +196,70 @@
         <p>Estilo • Atitude • Sempre com você</p>
       </div>
     </footer>
-    <!-- 05. Bootstrap JS: comportamentos de Collapse e Carousel. main.js tenta a cópia local se necessário. -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Script próprio: defer espera o HTML ser analisado antes de montar produtos e ativar contatos. -->
-    <script src="js/main.js?v=3" defer></script>
+    <aside class="offcanvas offcanvas-end cart-drawer" tabindex="-1" id="carrinho" aria-labelledby="carrinho-titulo">
+      <div class="cart-header">
+        <div>
+          <p class="eyebrow">Seu pedido</p>
+          <h2 id="carrinho-titulo" tabindex="-1">Carrinho <span id="cart-heading-count"></span></h2>
+        </div>
+        <button class="cart-close" type="button" data-bs-dismiss="offcanvas" aria-label="Fechar carrinho">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+      <div class="cart-body">
+        <div class="cart-empty" id="cart-empty">
+          <span class="cart-empty-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M5.5 8.5h13l-1.1 11.5H6.6L5.5 8.5Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+              <path d="M9 8.5V7a3 3 0 0 1 6 0v1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </span>
+          <p class="cart-empty-title">Seu carrinho está vazio.</p>
+          <p>Escolha as cores e as quantidades e envie a lista completa pelo WhatsApp.</p>
+          <a class="btn outline-button" href="produtos.html">Ver produtos <span aria-hidden="true">→</span></a>
+        </div>
+        <ul class="cart-items" id="cart-items" aria-label="Produtos no carrinho" hidden></ul>
+        <div class="cart-details" id="cart-details" hidden>
+          <p class="cart-price-note">Preço sob consulta. A loja confirma valores, tamanhos e disponibilidade pelo WhatsApp.</p>
+          <label for="cart-name">Seu nome <span>(opcional)</span></label>
+          <input class="cart-field" id="cart-name" type="text" autocomplete="name" maxlength="60" placeholder="Como podemos chamar você?">
+          <label for="cart-notes">Observações <span>(opcional)</span></label>
+          <textarea class="cart-field" id="cart-notes" rows="3" maxlength="300" placeholder="Ex.: tamanhos M e G, retirada na loja..."></textarea>
+        </div>
+      </div>
+      <div class="cart-footer" id="cart-footer" hidden>
+        <div class="cart-summary">
+          <span>Total</span>
+          <strong id="cart-total">0 itens</strong>
+        </div>
+        <button class="cart-checkout" id="cart-checkout" type="button">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M5.2 17.8 3.8 21l3.5-1.2A9 9 0 1 0 5.2 17.8Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+            <path d="M8.2 7.8c.3-.4.6-.4.9-.4h.5c.2 0 .4.1.5.4l.8 1.9c.1.3.1.5-.1.7l-.7.9c.7 1.2 1.6 2.1 2.8 2.7l.9-.7c.2-.2.5-.2.7-.1l1.9.8c.3.1.4.3.4.5v.5c0 .4-.1.7-.4.9-.5.4-1.2.6-1.9.4-2.8-.7-5.3-3.1-6.4-5.8-.3-.8-.3-1.5.1-2.1Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
+          </svg>
+          Finalizar pelo WhatsApp
+        </button>
+        <button class="cart-clear" id="cart-clear" type="button">Esvaziar carrinho</button>
+      </div>
+    </aside>
+
+    <div class="jj-toast" id="jj-toast" hidden>
+      <span id="jj-toast-text"></span>
+      <button class="jj-toast-action" id="jj-toast-action" type="button" hidden></button>
+    </div>
+    <p class="visually-hidden" id="jj-live" role="status" aria-live="polite"></p>
+
+    <script src="vendor/bootstrap/bootstrap.bundle.min.js" defer></script>
+    <!-- Ordem importa: dados → armazenamento → interface → funcionalidades → inicialização. -->
+    <script src="js/data.js?v=6" defer></script>
+    <script src="js/storage.js?v=6" defer></script>
+    <script src="js/ui.js?v=6" defer></script>
+    <script src="js/favorites.js?v=6" defer></script>
+    <script src="js/cart.js?v=6" defer></script>
+    <script src="js/history.js?v=6" defer></script>
+    <script src="js/catalog.js?v=6" defer></script>
+    <script src="js/main.js?v=6" defer></script>
   </body>
 </html>
