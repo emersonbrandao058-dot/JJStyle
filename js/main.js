@@ -1,180 +1,31 @@
-// Número com DDI e DDD; mensagens são montadas antes de abrir o WhatsApp.
-const STORE_CONFIG = Object.freeze({
-  whatsappNumber: '5575999312633',
-  instagramUrl: 'https://www.instagram.com/jjstylle_/',
-  address: 'R. Comendador Gomes, 483 - Parque Panorama, Feira de Santana - BA, 44091-238'
-});
+/* ==========================================================================
+   main.js — Montagem das páginas e inicialização
+   --------------------------------------------------------------------------
+   Ordem de carregamento (todas com defer, executadas nesta sequência):
+   bootstrap.bundle (local) → data.js → storage.js → ui.js → favorites.js
+   → cart.js → history.js → catalog.js → main.js
+   Este arquivo cria os cards, monta a página do produto, liga o header
+   (favoritos e carrinho) e chama a inicialização de cada funcionalidade.
+   ========================================================================== */
 
-// Cada modelo aparece uma vez; Home e catálogo escolhem quantos cards exibir.
-const PRODUCTS = [
-  {
-    id: 'puma-essentials',
-    name: 'Conjunto Puma Essentials',
-    versions: [
-      {
-        swatch: ['#ececf2', '#1b1a20'],
-        description: 'Branco e preto',
-        image: 'images/produtos/produto-01-puma-branco-preto.png',
-        alt: 'Camiseta Puma branca com bermuda preta',
-        whatsappText: 'Olá! Gostaria de consultar o preço e as condições do Conjunto Puma Essentials, branco e preto.'
-      },
-      {
-        swatch: ['#a8cdf5', '#d0bea5'],
-        description: 'Azul e bege',
-        image: 'images/produtos/01-puma-azul-bege.png',
-        alt: 'Camiseta Puma azul com bermuda bege',
-        whatsappText: 'Olá! Gostaria de consultar o preço e as condições do Conjunto Puma Essentials, azul e bege.'
-      }
-    ]
-  },
-  {
-    id: 'adidas-performance',
-    name: 'Conjunto Adidas Performance',
-    versions: [
-      {
-        swatch: ['#242527'],
-        description: 'Preto',
-        image: 'images/produtos/produto-02-adidas-preto.png',
-        alt: 'Conjunto Adidas preto',
-        whatsappText: 'Olá! Gostaria de consultar o preço e as condições do Conjunto Adidas Performance, preto.'
-      },
-      {
-        swatch: ['#afb2ba', '#1d3153'],
-        description: 'Cinza e azul-marinho',
-        image: 'images/produtos/02-adidas-cinza-azul-marinho.png',
-        alt: 'Camiseta Adidas cinza com bermuda azul-marinho',
-        whatsappText: 'Olá! Gostaria de consultar o preço e as condições do Conjunto Adidas Performance, cinza e azul-marinho.'
-      }
-    ]
-  },
-  {
-    id: 'puma-sport',
-    name: 'Conjunto Puma Sport',
-    versions: [
-      {
-        swatch: ['#1e1e23', '#eeedf1'],
-        description: 'Preto e branco',
-        image: 'images/produtos/produto-03-puma-preto-branco.png',
-        alt: 'Camiseta Puma preta de manga longa com bermuda branca',
-        whatsappText: 'Olá! Gostaria de consultar o preço e as condições do Conjunto Puma Sport, preto e branco.'
-      },
-      {
-        swatch: ['#601222', '#ddcbb0'],
-        description: 'Vinho e bege',
-        image: 'images/produtos/03-puma-vinho-bege.png',
-        alt: 'Camiseta Puma vinho de manga longa com bermuda bege',
-        whatsappText: 'Olá! Gostaria de consultar o preço e as condições do Conjunto Puma Sport, vinho e bege.'
-      }
-    ]
-  },
-  {
-    id: 'lacoste-sport',
-    name: 'Conjunto Lacoste Sport',
-    versions: [
-      {
-        swatch: ['#de0927'],
-        description: 'Vermelho',
-        image: 'images/produtos/produto-04-lacoste-vermelho.png',
-        alt: 'Conjunto Lacoste vermelho',
-        whatsappText: 'Olá! Gostaria de consultar o preço e as condições do Conjunto Lacoste Sport, vermelho.'
-      },
-      {
-        swatch: ['#1b2a49'],
-        description: 'Azul-marinho',
-        image: 'images/produtos/04-lacoste-azul-marinho.png',
-        alt: 'Regata e bermuda Lacoste azul-marinho',
-        whatsappText: 'Olá! Gostaria de consultar o preço e as condições do Conjunto Lacoste Sport, azul-marinho.'
-      }
-    ]
-  },
-  {
-    id: 'quiksilver-classic',
-    name: 'Conjunto Quiksilver Classic',
-    versions: [
-      {
-        swatch: ['#171719', '#efeeee'],
-        description: 'Preto e branco',
-        image: 'images/produtos/produto-05-quiksilver-preto-branco.png',
-        alt: 'Conjunto Quiksilver preto e branco',
-        whatsappText: 'Olá! Gostaria de consultar o preço e as condições do Conjunto Quiksilver Classic, preto e branco.'
-      },
-      {
-        swatch: ['#303827', '#d5c5af'],
-        description: 'Verde-oliva e bege',
-        image: 'images/produtos/05-quiksilver-verde-oliva-bege.png',
-        alt: 'Camisetas Quiksilver verde-oliva com bermuda bege',
-        whatsappText: 'Olá! Gostaria de consultar o preço e as condições do Conjunto Quiksilver Classic, verde-oliva e bege.'
-      }
-    ]
-  },
-  {
-    id: 'brt',
-    name: 'Conjunto BRT',
-    versions: [
-      {
-        swatch: ['#eeeef4', '#17181c'],
-        description: 'Branco e preto',
-        image: 'images/produtos/produto-06-brt-branco-preto.png',
-        alt: 'Conjunto BRT branco e preto',
-        whatsappText: 'Olá! Gostaria de consultar o preço e as condições do Conjunto BRT, branco e preto.'
-      },
-      {
-        swatch: ['#c4b3ee', '#5e5f63'],
-        description: 'Lilás e cinza',
-        image: 'images/produtos/06-brt-lilas-cinza.png',
-        alt: 'Camiseta BRT lilás com bermuda cinza',
-        whatsappText: 'Olá! Gostaria de consultar o preço e as condições do Conjunto BRT, lilás e cinza.'
-      }
-    ]
-  }
-];
-
-function makeElement(tag, className, textContent) {
-  const element = document.createElement(tag);
-  if (className) element.className = className;
-  if (textContent) element.textContent = textContent;
-  return element;
-}
-
-function makeWhatsAppIcon() {
-  const namespace = 'http://www.w3.org/2000/svg';
-  const icon = document.createElementNS(namespace, 'svg');
-  icon.setAttribute('viewBox', '0 0 24 24');
-  icon.setAttribute('fill', 'none');
-  icon.setAttribute('aria-hidden', 'true');
-  icon.setAttribute('focusable', 'false');
-
-  [
-    ['M5.2 17.8 3.8 21l3.5-1.2A9 9 0 1 0 5.2 17.8Z', '1.7'],
-    ['M8.2 7.8c.3-.4.6-.4.9-.4h.5c.2 0 .4.1.5.4l.8 1.9c.1.3.1.5-.1.7l-.7.9c.7 1.2 1.6 2.1 2.8 2.7l.9-.7c.2-.2.5-.2.7-.1l1.9.8c.3.1.4.3.4.5v.5c0 .4-.1.7-.4.9-.5.4-1.2.6-1.9.4-2.8-.7-5.3-3.1-6.4-5.8-.3-.8-.3-1.5.1-2.1Z', '1.4']
-  ].forEach(([shape, width]) => {
-    const path = document.createElementNS(namespace, 'path');
-    path.setAttribute('d', shape);
-    path.setAttribute('stroke', 'currentColor');
-    path.setAttribute('stroke-width', width);
-    path.setAttribute('stroke-linejoin', 'round');
-    icon.append(path);
-  });
-  return icon;
-}
-
-function productUrl(productId, versionIndex) {
-  return `produto.html?id=${encodeURIComponent(productId)}&versao=${versionIndex + 1}`;
-}
+/* Cards de produto -------------------------------------------------------- */
 
 function selectProductVersion(card, version, selectedButton, number, versionIndex, animateImage = false) {
   const image = card.querySelector('.card-img-top');
   const description = card.querySelector('.product-variant');
   const contactLink = card.querySelector('.product-whatsapp');
+  const productName = card.querySelector('.card-title').textContent;
 
+  // A cor escolhida fica guardada no card para o botão "Adicionar".
+  card.dataset.versionIndex = String(versionIndex);
   image.src = version.image;
   image.alt = version.alt;
   const detailUrl = productUrl(card.dataset.productId, versionIndex);
   const imageLink = card.querySelector('.product-image-link');
   imageLink.href = detailUrl;
-  imageLink.setAttribute('aria-label', `Ver ${card.querySelector('.card-title').textContent}, cor ${version.description}`);
+  imageLink.setAttribute('aria-label', `Ver ${productName}, cor ${version.description}`);
   card.querySelector('.product-name-link').href = detailUrl;
-  if (animateImage && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  if (animateImage && !prefersReducedMotion()) {
     const selectedImage = image.src;
     const fadeIn = () => {
       if (image.src !== selectedImage) return;
@@ -190,10 +41,8 @@ function selectProductVersion(card, version, selectedButton, number, versionInde
     }
   }
   description.textContent = `Cor: ${version.description}`;
-  contactLink.setAttribute(
-    'aria-label',
-    `Consultar ${card.querySelector('.card-title').textContent}, cor ${version.description}, no WhatsApp`
-  );
+  contactLink.setAttribute('aria-label', `Consultar ${productName}, cor ${version.description}, no WhatsApp`);
+  contactLink.title = 'Consultar no WhatsApp';
   if (/^\d{12,15}$/.test(number)) {
     contactLink.href = `https://wa.me/${number}?text=${encodeURIComponent(version.whatsappText)}`;
     contactLink.removeAttribute('aria-disabled');
@@ -202,25 +51,53 @@ function selectProductVersion(card, version, selectedButton, number, versionInde
     contactLink.setAttribute('aria-disabled', 'true');
   }
 
+  card.querySelector('.product-add').setAttribute(
+    'aria-label',
+    `Adicionar ${productName}, cor ${version.description}, ao carrinho`
+  );
   card.querySelectorAll('.product-option').forEach((button) => {
     button.setAttribute('aria-pressed', String(button === selectedButton));
   });
 }
 
-function createProductCard(product, headingTag, number) {
+// Feedback rápido no próprio botão depois de adicionar ao carrinho.
+function showAddedFeedback(button) {
+  const label = button.querySelector('.product-add-label');
+  window.clearTimeout(Number(button.dataset.feedbackTimer));
+  button.classList.add('is-added');
+  label.textContent = 'Adicionado';
+  button.dataset.feedbackTimer = String(window.setTimeout(() => {
+    button.classList.remove('is-added');
+    label.textContent = 'Adicionar';
+  }, 1600));
+}
+
+// priority: 'high' (primeiro card visível), 'eager' (logo abaixo) ou 'lazy' (padrão).
+function createProductCard(product, headingTag, number, initialIndex = 0, priority = 'lazy') {
   const card = makeElement('article', 'card product-card');
   card.dataset.productId = product.id;
-  const firstVersion = product.versions[0];
+  const firstVersion = product.versions[initialIndex];
+
+  const media = makeElement('div', 'product-media');
   const imageLink = makeElement('a', 'product-image-link');
-  imageLink.href = productUrl(product.id, 0);
-  imageLink.setAttribute('aria-label', `Ver ${product.name}, cor ${firstVersion.description}`);
+  imageLink.href = productUrl(product.id, initialIndex);
   const image = makeElement('img', 'card-img-top');
+  // Fotos WebP de 800 x 1067 (mesma proporção 3:4 das originais).
+  image.width = 800;
+  image.height = 1067;
+  image.decoding = 'async';
+  if (priority === 'lazy') {
+    image.loading = 'lazy';
+  } else if (priority === 'high') {
+    image.fetchPriority = 'high';
+  }
   image.src = firstVersion.image;
   image.alt = firstVersion.alt;
-  image.width = 1086;
-  image.height = 1448;
-  image.loading = 'lazy';
   imageLink.append(image);
+  media.append(imageLink, createFavoriteButton(product, 'card-favorite'));
+  if (product.isNew) {
+    media.append(makeElement('span', 'product-badge', 'Novo'));
+  }
 
   const body = makeElement('div', 'card-body');
   const heading = makeElement(headingTag, 'card-title');
@@ -229,85 +106,130 @@ function createProductCard(product, headingTag, number) {
   heading.append(nameLink);
   body.append(heading);
 
-  if (product.versions.length > 1) {
-    const options = makeElement('div', 'product-options');
-    options.setAttribute('role', 'group');
-    options.setAttribute('aria-label', `Cores de ${product.name}`);
+  // As amostras aparecem mesmo com uma só cor, para manter os cards alinhados.
+  const options = makeElement('div', 'product-options');
+  options.setAttribute('role', 'group');
+  options.setAttribute('aria-label', `Cores de ${product.name}`);
+  let selectedButton = null;
 
-    product.versions.forEach((version, index) => {
-      const button = makeElement('button', 'product-option');
-      button.type = 'button';
-      button.setAttribute('aria-label', `Cor ${version.description} do ${product.name}`);
-      button.setAttribute('aria-pressed', String(index === 0));
-      button.title = version.description;
-      const swatchFill = version.swatch.length === 1
-        ? version.swatch[0]
-        : `linear-gradient(90deg, ${version.swatch[0]} 50%, ${version.swatch[1]} 50%)`;
-      button.style.setProperty('--swatch-fill', swatchFill);
-      button.addEventListener('click', () => {
-        selectProductVersion(card, version, button, number, index, true);
-      });
-      options.append(button);
+  product.versions.forEach((version, index) => {
+    const button = makeElement('button', 'product-option');
+    button.type = 'button';
+    button.setAttribute('aria-label', `Cor ${version.description} do ${product.name}`);
+    button.setAttribute('aria-pressed', String(index === initialIndex));
+    button.title = version.description;
+    button.style.setProperty('--swatch-fill', swatchFill(version));
+    button.addEventListener('click', () => {
+      selectProductVersion(card, version, button, number, index, true);
     });
-    body.append(options);
-  }
+    if (index === initialIndex) selectedButton = button;
+    options.append(button);
+  });
+  body.append(options);
 
   body.append(
     makeElement('p', 'product-variant', `Cor: ${firstVersion.description}`),
     makeElement('p', 'product-price', 'Preço sob consulta')
   );
 
+  const actions = makeElement('div', 'product-actions');
+  const addButton = makeElement('button', 'product-add');
+  addButton.type = 'button';
+  addButton.append(makeIcon('bag'), makeElement('span', 'product-add-label', 'Adicionar'));
+  addButton.addEventListener('click', () => {
+    addToCart(product.id, Number(card.dataset.versionIndex), 1);
+    showAddedFeedback(addButton);
+  });
+
   const contactLink = makeElement('a', 'btn product-whatsapp');
   contactLink.target = '_blank';
   contactLink.rel = 'noopener noreferrer';
-  contactLink.append(
-    makeWhatsAppIcon(),
-    makeElement('span', '', 'CONSULTAR'),
-    makeElement('span', 'product-whatsapp-arrow', '→')
-  );
-  body.append(contactLink);
-  card.append(imageLink, body);
-  selectProductVersion(card, firstVersion, card.querySelector('.product-option'), number, 0);
+  contactLink.append(makeWhatsAppIcon());
+
+  actions.append(addButton, contactLink);
+  body.append(actions);
+  card.append(media, body);
+  selectProductVersion(card, firstVersion, selectedButton, number, initialIndex);
   return card;
 }
 
+// Vitrine da Home: quatro destaques, com os lançamentos primeiro.
 function renderProducts(number) {
-  document.querySelectorAll('[data-product-list]').forEach((list) => {
-    const isHome = list.dataset.productList === 'home';
-    const products = isHome ? PRODUCTS.slice(0, 4) : PRODUCTS;
-    const headingTag = isHome ? 'h3' : 'h2';
-    list.replaceChildren(...products.map((product) => createProductCard(product, headingTag, number)));
+  document.querySelectorAll('[data-product-list="home"]').forEach((list) => {
+    const featured = getFeaturedProducts(4);
+    list.replaceChildren(...featured.map((entry) => createProductCard(entry.product, 'h3', number, entry.versionIndex)));
   });
+  syncFavoriteButtons();
 }
 
+/* Página individual do produto ------------------------------------------- */
+
+// Sugestões: primeiro a mesma marca, depois lançamentos, depois o restante.
+function getRelatedProducts(product, limit) {
+  const others = PRODUCTS.filter((item) => item.id !== product.id);
+  const score = (item) => {
+    if (item.brand === product.brand) return 2;
+    if (item.isNew) return 1;
+    return 0;
+  };
+  return others
+    .map((item, order) => ({ item, order }))
+    .sort((a, b) => score(b.item) - score(a.item) || a.order - b.order)
+    .slice(0, limit)
+    .map((entry) => entry.item);
+}
+
+function initializeDetailQuantity() {
+  const input = document.getElementById('detail-quantity');
+  const decrease = document.getElementById('detail-decrease');
+  const increase = document.getElementById('detail-increase');
+
+  const update = (value) => {
+    const quantity = clampQuantity(value);
+    input.value = String(quantity);
+    decrease.disabled = quantity <= 1;
+    increase.disabled = quantity >= CART_MAX_QUANTITY;
+  };
+
+  decrease.addEventListener('click', () => update(Number(input.value) - 1));
+  increase.addEventListener('click', () => update(Number(input.value) + 1));
+  input.addEventListener('change', () => update(input.value));
+  update(1);
+}
+
+// Retorna o id do produto exibido (ou null) para o histórico ignorá-lo.
 function renderProductDetail(number) {
   const detail = document.getElementById('product-detail');
-  if (!detail) return;
+  if (!detail) return null;
 
   const params = new URLSearchParams(window.location.search);
-  const product = PRODUCTS.find((item) => item.id === params.get('id'));
+  const product = getProductById(params.get('id'));
   if (!product) {
     document.getElementById('product-not-found').hidden = false;
     document.title = 'Produto não encontrado | JJ Style';
-    return;
+    return null;
   }
 
   const requestedVersion = Number(params.get('versao')) - 1;
-  const initialIndex = Number.isInteger(requestedVersion) && requestedVersion >= 0 && requestedVersion < product.versions.length
-    ? requestedVersion
-    : 0;
+  let currentIndex = isValidVersion(product, requestedVersion) ? requestedVersion : 0;
   const image = document.getElementById('detail-image');
+  // A foto principal é o maior elemento da página: pede prioridade alta.
+  image.fetchPriority = 'high';
   const colorName = document.getElementById('detail-color-name');
   const contactLink = document.getElementById('detail-whatsapp');
   const options = document.getElementById('detail-options');
+  const favoriteButton = document.getElementById('detail-favorite');
 
   document.title = `${product.name} | JJ Style`;
   document.getElementById('detail-breadcrumb-name').textContent = product.name;
   document.getElementById('detail-name').textContent = product.name;
+  document.getElementById('detail-brand').textContent = product.brand;
+  document.getElementById('detail-badge').hidden = !product.isNew;
   options.setAttribute('aria-label', `Cores de ${product.name}`);
 
   function selectVersion(index, updateUrl = false) {
     const version = product.versions[index];
+    currentIndex = index;
     image.src = version.image;
     image.alt = version.alt;
     colorName.textContent = version.description;
@@ -322,6 +244,8 @@ function renderProductDetail(number) {
     options.querySelectorAll('.product-option').forEach((button, buttonIndex) => {
       button.setAttribute('aria-pressed', String(buttonIndex === index));
     });
+    // O histórico lembra a última cor vista deste produto.
+    addToHistory(product.id, index);
     if (updateUrl) window.history.replaceState(null, '', productUrl(product.id, index));
   }
 
@@ -330,16 +254,98 @@ function renderProductDetail(number) {
     button.type = 'button';
     button.title = version.description;
     button.setAttribute('aria-label', `Selecionar cor ${version.description}`);
-    button.style.setProperty('--swatch-fill', version.swatch.length === 1
-      ? version.swatch[0]
-      : `linear-gradient(90deg, ${version.swatch[0]} 50%, ${version.swatch[1]} 50%)`);
+    button.style.setProperty('--swatch-fill', swatchFill(version));
     button.addEventListener('click', () => selectVersion(index, true));
     options.append(button);
   });
 
-  selectVersion(initialIndex);
+  favoriteButton.dataset.favoriteId = product.id;
+  favoriteButton.addEventListener('click', () => handleFavoriteClick(product));
+
+  initializeDetailQuantity();
+  document.getElementById('detail-add').addEventListener('click', () => {
+    const quantity = clampQuantity(document.getElementById('detail-quantity').value);
+    addToCart(product.id, currentIndex, quantity);
+  });
+
+  const relatedList = document.getElementById('related-products');
+  if (relatedList) {
+    const related = getRelatedProducts(product, 4);
+    relatedList.replaceChildren(...related.map((item) => createProductCard(item, 'h3', number)));
+    document.getElementById('related-section').hidden = related.length === 0;
+  }
+
+  selectVersion(currentIndex);
+  syncFavoriteButtons();
   detail.hidden = false;
+  return product.id;
 }
+
+/* Header: contadores de favoritos e carrinho ------------------------------ */
+
+function setBadge(badge, value) {
+  if (!badge) return;
+  const previous = badge.textContent;
+  badge.textContent = value > 99 ? '99+' : String(value);
+  badge.hidden = value === 0;
+  if (value > 0 && previous !== badge.textContent) {
+    bumpBadge(badge);
+  }
+}
+
+function updateHeaderCounters() {
+  const favoritesTotal = getFavorites().length;
+  const cartTotal = countCartItems(getCart());
+
+  setBadge(document.getElementById('favorites-count'), favoritesTotal);
+  setBadge(document.getElementById('cart-count'), cartTotal);
+
+  const favoritesLink = document.getElementById('header-favorites');
+  const cartButton = document.getElementById('header-cart');
+  if (favoritesLink) {
+    favoritesLink.setAttribute('aria-label', `Favoritos (${favoritesTotal})`);
+  }
+  if (cartButton) {
+    cartButton.setAttribute('aria-label', `Abrir carrinho (${cartTotal} ${cartTotal === 1 ? 'item' : 'itens'})`);
+  }
+}
+
+// Eventos próprios disparados por favorites.js, cart.js e history.js.
+function initializeAppEvents() {
+  document.addEventListener('jj:favorites-change', () => {
+    updateHeaderCounters();
+    syncFavoriteButtons();
+  });
+  document.addEventListener('jj:cart-change', () => {
+    updateHeaderCounters();
+    renderCart();
+  });
+
+  // O evento "storage" avisa quando outra aba do site alterou o LocalStorage.
+  window.addEventListener('storage', (event) => {
+    switch (event.key) {
+      case STORAGE_KEYS.favorites:
+        document.dispatchEvent(new CustomEvent('jj:favorites-change'));
+        break;
+      case STORAGE_KEYS.cart:
+        document.dispatchEvent(new CustomEvent('jj:cart-change'));
+        break;
+      case STORAGE_KEYS.history:
+        document.dispatchEvent(new CustomEvent('jj:history-change'));
+        break;
+      case null:
+        // localStorage.clear() em outra aba: atualiza tudo.
+        document.dispatchEvent(new CustomEvent('jj:favorites-change'));
+        document.dispatchEvent(new CustomEvent('jj:cart-change'));
+        document.dispatchEvent(new CustomEvent('jj:history-change'));
+        break;
+      default:
+        break;
+    }
+  });
+}
+
+/* Links, Bootstrap e contato (Parte I) ------------------------------------ */
 
 function activateExternalLink(link, href) {
   link.href = href;
@@ -353,6 +359,8 @@ function activateSocialLink(link, href, label) {
   link.title = label;
 }
 
+// O Bootstrap vem de vendor/bootstrap/ (cópia local da versão 5.3.8), carregado
+// com defer ANTES dos scripts do site. Assim não há CDN nem download duplicado.
 function initializeBootstrap() {
   if (!window.bootstrap) return;
 
@@ -370,18 +378,6 @@ function initializeBootstrap() {
       }
     });
   });
-}
-
-function loadBootstrap() {
-  if (window.bootstrap) {
-    initializeBootstrap();
-    return;
-  }
-
-  const fallbackScript = document.createElement('script');
-  fallbackScript.src = 'vendor/bootstrap/bootstrap.bundle.min.js';
-  fallbackScript.addEventListener('load', initializeBootstrap, { once: true });
-  document.head.appendChild(fallbackScript);
 }
 
 function openWhatsApp(number, message) {
@@ -466,9 +462,19 @@ function initializeLocation() {
   });
 }
 
-loadBootstrap();
-renderProducts(STORE_CONFIG.whatsappNumber.replace(/\D/g, ''));
-renderProductDetail(STORE_CONFIG.whatsappNumber.replace(/\D/g, ''));
+/* Inicialização ----------------------------------------------------------- */
+
+const WHATSAPP_NUMBER = STORE_CONFIG.whatsappNumber.replace(/\D/g, '');
+
+initializeBootstrap();
+initializeToast();
+initializeAppEvents();
+renderProducts(WHATSAPP_NUMBER);
+initializeCatalog();
+const currentProductId = renderProductDetail(WHATSAPP_NUMBER);
+initializeHistory(currentProductId);
+initializeCart();
+updateHeaderCounters();
 initializeWhatsApp();
 initializeInstagram();
 initializeLocation();
