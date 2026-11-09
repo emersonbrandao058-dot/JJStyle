@@ -96,6 +96,35 @@ async function addFromCard(page, productId) {
 }
 async function removeLine(page, line) { await page.click(`[data-cart-action="remove"][data-line="${line}"]`); }
 
+/* ====================== Aviso de projeto acadêmico ====================== */
+for (const pagePath of ['index.html', 'produtos.html', 'produto.html?id=brt']) {
+  await test('Projeto acadêmico', pagePath + ': faixa informativa permanente', async (app) => {
+    await app.go(pagePath);
+    const notice = app.page.locator('.academic-banner');
+    ok(await notice.isVisible(), 'faixa acadêmica não aparece');
+    const message = await notice.innerText();
+    ok(message.includes('PROJETO ACADÊMICO'), 'falta identificação acadêmica');
+    ok(message.includes('sem vendas ou pagamentos reais'), 'falta aviso de demonstração');
+  });
+}
+await test('Projeto acadêmico', 'preloader explica o contexto e pode ser dispensado', async (app) => {
+  await app.go('index.html');
+  const intro = app.page.locator('#academic-preloader');
+  ok(await intro.count() === 1, 'preloader não foi criado');
+  const message = await intro.innerText();
+  ok(message.includes('projeto acadêmico'), 'preloader sem aviso acadêmico');
+  ok(message.includes('Não realizamos vendas, pagamentos ou entregas reais'), 'preloader sem aviso comercial');
+  await app.page.click('.academic-preloader-skip');
+  await intro.waitFor({ state: 'detached', timeout: 3000 });
+  await app.go('produtos.html');
+  eq(await app.page.locator('#academic-preloader').count(), 0, 'preloader repetido na mesma aba');
+});
+await test('Projeto acadêmico', 'preloader desaparece automaticamente', async (app) => {
+  await app.go('index.html');
+  await app.page.locator('#academic-preloader').waitFor({ state: 'detached', timeout: 4000 });
+  ok(await app.page.locator('.academic-banner').isVisible(), 'faixa sumiu após preloader');
+});
+
 /* ======================= 1. Carregamento e Bootstrap ======================= */
 for (const file of ['index.html', 'produtos.html', 'produto.html?id=brt']) {
   await test('Recursos', `${file}: sem erros de JS, sem 404 e Bootstrap carregado uma única vez`, async (app) => {
