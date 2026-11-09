@@ -1,30 +1,146 @@
-# JJ Style — Home, catálogo e produto
+# JJ Style — Home, catálogo, produto e carrinho
 
-Home responsiva, catálogo e página individual de produto para a JJ Style, com a identidade visual do [Figma da Home](https://www.figma.com/design/SEKixVXDTfooARsFs5MlaC). O projeto usa HTML5, CSS3, JavaScript simples e Bootstrap 5.3.8 por CDN. Não há processo de build, React, Tailwind ou checkout.
+Home responsiva, catálogo e página individual de produto para a JJ Style, com a identidade visual do [Figma da Home](https://www.figma.com/design/SEKixVXDTfooARsFs5MlaC). O projeto usa HTML5, CSS3, JavaScript simples e Bootstrap 5.3.8 (cópia local em `vendor/bootstrap/`). Não há processo de build, React ou Tailwind. Na Parte II, o site ganhou favoritos, busca e filtros, carrinho com envio pelo WhatsApp e histórico de produtos vistos, tudo salvo no LocalStorage do navegador.
 
 ## Executar
 
-Abra `index.html` em um navegador ou sirva a pasta localmente:
+O site é estático e **não depende de nenhum servidor externo** (Bootstrap e a fonte Archivo estão na pasta `vendor/`). Abra `index.html` no navegador ou sirva a pasta localmente, por exemplo:
 
 ```bash
-python -m http.server 8765
+npx serve .          # ou a extensão "Live Server" do VS Code
+python -m http.server 8765   # se o Python estiver instalado
 ```
 
-Depois visite `http://localhost:8765/` e use “Ver todos” para abrir `produtos.html`. O Bootstrap é referenciado pelo CDN; os arquivos em `vendor/bootstrap/` servem como fallback para ambientes que bloqueiam o CDN. Os caminhos relativos também funcionam no site publicado na Vercel.
+Depois use “Ver todos” para abrir `produtos.html`. Os caminhos são relativos e funcionam igual no site publicado na Vercel.
 
 ## Estrutura
 
-- `index.html`: Home com quatro produtos em destaque, navbar, carousel e formulário.
-- `produtos.html`: catálogo com os seis produtos e consultas individuais pelo WhatsApp.
-- `produto.html`: página individual que lê `id` e `versao` da URL, por exemplo `produto.html?id=puma-essentials&versao=2`.
-- `css/style.css`: identidade visual, animação das marcas e responsividade.
-- `js/main.js`: dados únicos dos seis produtos e suas versões, seletores de cor dos cards e da página individual, menu, carrossel e ações de contato compartilhadas pelas três páginas.
-- Os dois ícones sociais do contato usam apenas HTML, SVG e CSS; a troca por seta também funciona com foco pelo teclado e sem animação em `prefers-reduced-motion`.
-- `images/`: imagens fornecidas para banners, marcas, produtos, branding e loja.
+- `index.html`: Home com quatro produtos em destaque (os lançamentos aparecem primeiro), navbar, carrossel, formulário e “Vistos recentemente”.
+- `produtos.html`: catálogo com os nove produtos, busca dinâmica, filtros e ordenação.
+- `produto.html`: página individual que lê `id` e `versao` da URL, por exemplo `produto.html?id=puma-essentials&versao=2`. Tem quantidade, carrinho, favorito, sugestões e histórico.
+- `css/style.css`: identidade visual, animação das marcas e responsividade. Os estilos da Parte II ficam na seção final do arquivo.
+- `js/`: um arquivo por responsabilidade (veja abaixo).
+- `images/`: imagens fornecidas para banners, marcas, produtos, branding e loja. O site usa as versões `.webp`; os `.png` originais foram mantidos como arquivo-fonte.
+- `images/produtos/thumbs/`: miniaturas WebP (240 × 320) usadas no carrinho e no histórico.
+- `vendor/bootstrap/`: Bootstrap 5.3.8 (CSS e JS) servido pelo próprio site. `vendor/fonts/`: fonte Archivo (licença OFL incluída).
+- `tests/`: testes automáticos de ponta a ponta (veja “Testes”).
+- `docs/`: material da disciplina (o `.docx` do professor fica aqui e **não é versionado**, ver `.gitignore`).
+
+### Imagens, fontes e desempenho
+
+As imagens foram convertidas para WebP mantendo as proporções originais: produtos em 800 × 1067, banners com até 1600 px de largura e miniaturas de 240 × 320. A função `getThumbnail` (`js/data.js`) encontra a miniatura de cada versão do produto. Para o carregamento ficar mais rápido:
+
+- o primeiro banner e a foto da página do produto pedem prioridade alta (`fetchpriority="high"`); os banners 2 e 3, que começam escondidos, usam prioridade baixa;
+- os cards abaixo da primeira linha, o carrinho, o histórico e o mapa usam `loading="lazy"`;
+- todas as imagens declaram `width` e `height`, evitando que a página “pule” enquanto carrega;
+- **Bootstrap e fonte vêm do próprio site.** Antes o CSS do Bootstrap era baixado duas vezes (CDN e cópia local) e o JavaScript vinha de um CDN, bloqueando a página. Agora há um único `bootstrap.min.css` e um `bootstrap.bundle.min.js` com `defer`, carregado antes dos scripts do site. A Archivo (fonte variável, 35 KB) também é local, com `preload`, então não há conexões a `cdn.jsdelivr.net`, `fonts.googleapis.com` ou `fonts.gstatic.com`. O site funciona offline, exceto o mapa e os links externos;
+- o favicon continua em PNG, porque nem todo navegador aceita favicon em WebP.
+
+Medição com o Edge (servidor local, sem cache): a Home no celular, com rolagem completa, transfere cerca de 1,4 MB de arquivos do próprio site (o mapa do Google, incorporado e externo, soma mais); o catálogo no desktop, 1,8 MB; a página de produto no celular, 1,1 MB. Os dois ícones sociais do contato usam apenas HTML, SVG e CSS.
+
+### Banner no celular
+
+Abaixo de 768 px, o banner mostra a arte em cima e o botão (“Ver produtos”, “Faça seu pedido”) numa **faixa própria logo abaixo da arte**. Assim o botão nunca cobre título, produto ou modelo, em nenhuma largura (de 320 a 767 px). No desktop, o botão continua posicionado sobre a arte horizontal. A altura da arte é definida por `--hero-art-height` no bloco `@media (max-width: 767.98px)` de `css/style.css`.
+
+### Organização do JavaScript
+
+Os scripts são carregados com `defer`, nesta ordem, em todas as páginas (o Bootstrap vem primeiro):
+
+| Arquivo | Responsabilidade |
+| --- | --- |
+| `js/data.js` | `STORE_CONFIG` e a lista `PRODUCTS` (nome, marca, lançamento, versões de cor). Só dados. |
+| `js/storage.js` | `readStorage`, `writeStorage` e `removeStorage`: acesso seguro ao LocalStorage com JSON e `try/catch`. Se o navegador bloquear o LocalStorage, usa uma memória temporária e o site continua funcionando na sessão. |
+| `js/ui.js` | Funções de interface reaproveitadas: criar elementos, ícones SVG, amostras de cor e aviso flutuante (toast). |
+| `js/favorites.js` | Adicionar/remover favoritos e atualizar todos os corações da página. |
+| `js/cart.js` | Carrinho: adicionar, quantidade, troca de cor, remoção com “Desfazer”, painel lateral e mensagem do WhatsApp. |
+| `js/history.js` | Histórico de produtos visualizados (até 8, sem repetição, mais recente primeiro). |
+| `js/catalog.js` | Busca dinâmica, filtros rápidos, marca, cor, ordenação e sincronização com a URL. |
+| `js/main.js` | Cards de produto, página do produto, contadores do header, eventos entre módulos e inicialização. |
+
+Os módulos conversam por eventos próprios (`jj:favorites-change`, `jj:cart-change`, `jj:history-change`): quem altera os dados dispara o evento, e header, carrinho e catálogo se atualizam. O evento `storage` do navegador mantém abas diferentes sincronizadas.
+
+## Funcionalidades da Parte II
+
+- **Novos produtos:** Conjunto Nike Urban (preto e cinza), Conjunto New Balance Casual (bege e preto) e Conjunto Under Armour Active (verde-oliva e preto), com selo “Novo”. O banner “Novidades da semana” abre o catálogo já filtrado em Novidades.
+- **Favoritos:** coração nos cards e na página do produto; contador no header; o ícone do header abre `produtos.html?filtro=favoritos`. Ao remover um favorito dentro dessa lista, o foco do teclado vai para o card que ocupou o lugar (o próximo; se era o último, o anterior; se a lista esvaziou, para a mensagem de lista vazia).
+- **Busca e filtros:** a busca filtra a cada letra e ignora acentos e maiúsculas (“lilas” encontra “Lilás”). Há filtros rápidos (Todos, Novidades, Favoritos), marca, cor e ordenação. Ao filtrar por cor, o card já aparece na versão daquela cor. O estado vai para a URL (ex.: `produtos.html?marca=Puma&cor=Bege`). Atalhos: `/` foca a busca e `Esc` limpa. O link `produtos.html#busca` (ícone de lupa do header) já abre com o cursor na busca.
+- **Carrinho:** o botão “Adicionar” usa a cor selecionada no card; na página do produto também é possível escolher a quantidade. No painel lateral, cada item permite trocar a cor (cores iguais são somadas), alterar a quantidade (1 a 99), remover e desfazer. Nome e observações (ex.: tamanhos) são opcionais e ficam salvos.
+- **Desfazer seguro:** “Desfazer” não restaura um retrato antigo do carrinho. Ele devolve ao carrinho *atual* apenas as linhas removidas (`restoreCartLines`, `js/cart.js`), na posição original; se o mesmo produto e cor já voltaram, as quantidades são somadas (limite de 99). Tudo o que a pessoa fez depois da remoção é preservado. Com o carrinho aberto, o aviso com o botão “Desfazer” fica dentro do painel, para que o teclado consiga alcançá-lo.
+- **Finalização pelo WhatsApp:** como os preços são sob consulta, “Finalizar pelo WhatsApp” monta uma mensagem numerada e formatada para o WhatsApp (negrito e ícones) com produto, cor, quantidade, total de peças, nome e observações. A pessoa ainda confirma o envio no aplicativo. Exemplo:
+
+  ```text
+  Olá, JJ Style! Aqui é Emerson 👋
+  Montei um pedido pelo site e gostaria de saber preços e disponibilidade.
+
+  🛍️ *MEU PEDIDO*
+
+  *1. Conjunto New Balance Casual*
+  ▫️ Cor: Bege e preto
+  ▫️ Quantidade: 2
+
+  📦 *Total:* 2 peças
+  📝 *Observações:* Tamanhos M e G
+
+  Fico no aguardo dos valores e condições. Obrigado!
+  _Pedido enviado pelo site JJ Style_
+  ```
+
+- **Histórico:** “Vistos recentemente” aparece na Home, no catálogo e na página do produto (sem repetir o produto aberto), com o tempo da visita (“Visto há 3 h”) e botão para limpar.
+- **Experiência:** sugestões “Você também pode gostar” (mesma marca primeiro), avisos com ação (“Ver carrinho”, “Desfazer”; avisos com botão ficam 8 s e pausam com o mouse ou o foco), estados vazios com orientação e região `aria-live` para leitores de tela.
+
+### Chaves no LocalStorage
+
+| Chave | Conteúdo |
+| --- | --- |
+| `jjstyle:favoritos` | `["nike-urban", "brt"]` |
+| `jjstyle:carrinho` | `[{ "productId": "nike-urban", "versionIndex": 0, "quantity": 2 }]` |
+| `jjstyle:historico` | `[{ "productId": "brt", "versionIndex": 1, "viewedAt": 1793000000000 }]` |
+| `jjstyle:pedido` | `{ "name": "…", "notes": "…" }` |
+
+Ao ler, os dados são validados: itens de produtos inexistentes ou JSON corrompido são descartados sem quebrar a página.
+
+## Roteiro para a apresentação
+
+Onde encontrar cada conceito pedido no TDE. Os números são linhas reais dos arquivos; o teste `tests/check-docs.mjs` confere se cada linha citada contém mesmo aquela estrutura (rode-o depois de editar qualquer `.js`).
+
+| Conceito | Exemplos no código |
+| --- | --- |
+| `if / else` | `clampQuantity` (`js/cart.js:57`); `restoreCartLines`, Desfazer (`js/cart.js:133`); `describeViewTime` (`js/history.js:42`); `describeResults` (`js/catalog.js:108`); estado vazio (`js/catalog.js:161`). |
+| `switch / case` | quantidade do carrinho (`js/cart.js:90`); cliques do painel (`js/cart.js:381`); filtros rápidos (`js/catalog.js:31`); ordenação (`js/catalog.js:75`); sincronização entre abas (`js/main.js:326`). |
+| `for` | validação do carrinho (`js/cart.js:20`); mensagem do WhatsApp (`js/cart.js:329`); versões de cor na busca (`js/catalog.js:47`); atualização dos corações (`js/favorites.js:63`). |
+| `while` | limite do histórico (`js/history.js:27`); montagem do histórico (`js/history.js:91`); palavras da busca (`js/catalog.js:57`). |
+| Funções | cada funcionalidade é dividida em funções pequenas: `addToCart` (`js/cart.js:65`), `restoreCartLines` (`js/cart.js:127`), `toggleFavorite` (`js/favorites.js:23`), `addToHistory` (`js/history.js:21`), `applyCatalogFilters` (`js/catalog.js:121`). |
+| Eventos | `input` da busca (`js/catalog.js:292`); `change` dos filtros (`js/catalog.js:316`); delegação de `click` no carrinho (`js/cart.js:376`); `change` da quantidade (`js/cart.js:394`); evento `storage` (`js/main.js:325`). |
+| DOM com `getElementById` | painel do carrinho (`js/cart.js:271`); busca (`js/catalog.js:289`); contadores do header (`js/main.js:300`); histórico (`js/history.js:83`). |
+| LocalStorage | `getItem` (`js/storage.js:29`), `setItem` (`js/storage.js:42`) e `removeItem` (`js/storage.js:54`). |
+| HTML5 / CSS3 / Bootstrap | HTML semântico (`header`, `nav`, `main`, `section`, `footer`) em `index.html`; variáveis e `@media` em `css/style.css`; navbar, carrossel e painel do carrinho (offcanvas) do Bootstrap. |
+| Utilidade no mundo real | catálogo com busca e filtros, carrinho que gera o pedido pronto para o WhatsApp da loja, favoritos e histórico guardados no navegador. |
+
+### Sugestão de divisão entre 4 integrantes
+
+Cada integrante mostra o site funcionando e explica um trecho:
+
+1. **HTML, CSS e responsividade:** `index.html` (estrutura, carrossel), `css/style.css` (variáveis, `@media`, banner mobile).
+2. **JavaScript básico:** `js/data.js` (dados e funções de busca), `if / else` e `switch / case` em `js/cart.js` e `js/catalog.js`.
+3. **DOM, eventos e repetição:** busca dinâmica e filtros em `js/catalog.js`, `for` e `while`, `getElementById`, `addEventListener`.
+4. **LocalStorage e utilidade real:** `js/storage.js`, favoritos, histórico, carrinho (inclusive “Desfazer”) e mensagem do WhatsApp.
+
+## Testes
+
+Os testes automáticos ficam em `tests/` e usam o Microsoft Edge já instalado (via `playwright-core`, sem baixar navegador):
+
+```bash
+cd tests
+npm install
+npm test             # testes de ponta a ponta no navegador
+npm run check-docs   # confere as linhas citadas neste README
+```
+
+A suíte abre o site num servidor local temporário e cobre carregamento sem erros de JavaScript e sem 404, Bootstrap e fonte carregados uma única vez e do próprio site, busca, filtros, ordenação, favoritos (incluindo foco do teclado), histórico, carrinho (quantidades, cores, Desfazer, mensagem do WhatsApp), LocalStorage corrompido ou bloqueado, sincronização entre abas, ausência de rolagem horizontal de 320 a 1920 px e o posicionamento do botão do banner no celular. O que é conferido só a olho (aparência dos banners e das páginas) foi inspecionado por capturas de tela e não faz parte da suíte.
 
 ## Contatos e configuração
 
-Os destinos usados nesta demonstração ficam no início de `js/main.js`, em `STORE_CONFIG`:
+Os destinos usados nesta demonstração ficam no início de `js/data.js`, em `STORE_CONFIG`:
 
 ```js
 const STORE_CONFIG = Object.freeze({
@@ -34,21 +150,30 @@ const STORE_CONFIG = Object.freeze({
 });
 ```
 
-**O WhatsApp 5575999312633 é um contato de demonstração deste projeto acadêmico, não o contato oficial da loja.** Os links de WhatsApp do header, footer, cards e bloco de atacado usam esse número. O formulário prepara uma mensagem com os campos preenchidos; a pessoa ainda precisa confirmar o envio no aplicativo. O botão de rotas usa o endereço incluído no mapa fornecido.
+**O WhatsApp 5575999312633 é um contato de demonstração deste projeto acadêmico, não o contato oficial da loja.** Os links de WhatsApp do header, footer, cards, carrinho e bloco de atacado usam esse número. O formulário e o carrinho preparam mensagens com os dados preenchidos; a pessoa ainda precisa confirmar o envio no aplicativo. O botão de rotas usa o endereço incluído no mapa fornecido.
 
-A Home e o catálogo montam os cards a partir de `PRODUCTS`, em `js/main.js`. Cada versão guarda imagem, descrição, cores da amostra e mensagem própria de WhatsApp. Os círculos sob o nome mostram as cores disponíveis nas fotos; conjuntos de duas cores usam uma amostra dividida. A Home mostra os quatro primeiros modelos; o catálogo mostra os seis. A foto e o nome de cada card abrem a página individual com a cor selecionada; “CONSULTAR” continua a abrir o WhatsApp diretamente. Para acrescentar ou corrigir uma versão, edite somente essa lista.
+A Home e o catálogo montam os cards a partir de `PRODUCTS`, em `js/data.js`. Cada produto tem `brand` (filtro por marca) e `isNew` (selo “Novo”); cada versão guarda imagem, descrição, cores da amostra e mensagem própria de WhatsApp. As cores do filtro são lidas da descrição de cada versão. A foto e o nome de cada card abrem a página individual com a cor selecionada; “Adicionar” coloca essa cor no carrinho e o ícone do WhatsApp continua abrindo a consulta individual. Para acrescentar ou corrigir uma versão, edite somente essa lista.
 
 O mapa incorporado usa o iframe fornecido pela loja. Seu `src` permanece no `index.html`; a altura e a largura são definidas em `css/style.css`.
 
-**Dados a confirmar com a loja:** preços e condições comerciais dos seis produtos; nomes comerciais dos modelos. As cores exibidas foram conferidas nas imagens disponíveis. Até lá, os cards mostram “Preço sob consulta”. Não há cálculo de frete, pagamento ou compra simulada.
+**Dados a confirmar com a loja:** preços e condições comerciais dos nove produtos; nomes comerciais dos modelos; tamanhos disponíveis (por isso o carrinho oferece um campo de observações em vez de uma lista de tamanhos). As cores exibidas foram conferidas nas imagens disponíveis. Até lá, os cards mostram “Preço sob consulta”. Não há cálculo de frete nem pagamento.
 
-A galeria do Instagram foi deixada para uma etapa posterior. Nas artes mobile dos banners 01 e 03, a chamada para Produtos aparece dentro da área do banner e leva à vitrine da Home.
+A galeria do Instagram foi deixada para uma etapa posterior. Na arte mobile do banner 01, a chamada para Produtos leva à vitrine da Home; a do banner 03 abre as novidades no catálogo.
+
+## Prototipação e identidade visual
+
+Antes da implementação, a Home foi prototipada no Figma em versões Desktop e Mobile. O fundo escuro é a base da interface; o laranja destaca CTAs, botões e elementos de atenção, enquanto cores secundárias e tons neutros ajudam na hierarquia e na legibilidade.
+
+A Home começa pelo banner principal e segue por marcas, produtos, atendimento para atacado e varejo, apresentação da loja, contato e rodapé. Essa sequência facilita a navegação. No mobile, os elementos são reorganizados para telas menores sem perder a identidade visual. O Figma serviu de referência para a implementação em HTML, CSS e Bootstrap.
+
+Os recursos da Parte II seguem a mesma linguagem: superfícies escuras, botões em pílula, laranja para ações principais (incluindo “Finalizar pelo WhatsApp”) e verde nos atalhos de consulta individual pelo WhatsApp.
 
 ## Entrega do TDE
 
 - GitHub: [emersonbrandao058-dot/JJStyle](https://github.com/emersonbrandao058-dot/JJStyle)
-- Site publicado: [jj-style.vercel.app](https://jj-style.vercel.app/)
+- Site publicado (Parte I): [jj-style.vercel.app](https://jj-style.vercel.app/)
 - Design: [Figma da Home](https://www.figma.com/design/SEKixVXDTfooARsFs5MlaC)
 - Páginas: `index.html`, `produtos.html` e `produto.html`.
+- Prazos (Parte II): envio no Google Sala de Aula até 16/11/2026; apresentação em 17/11/2026.
 
 O histórico Git registra pelo menos duas versões identificáveis: `7d83f44` (Versão 1 — Home e catálogo responsivos) e `5de55f5` (Versão 2 — página individual de produtos).
