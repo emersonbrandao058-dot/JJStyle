@@ -1,10 +1,7 @@
-/* ==========================================================================
-   history.js — Produtos vistos recentemente
-   --------------------------------------------------------------------------
-   Sempre que a página produto.html abre, o produto vai para o início da
-   lista. Cada produto aparece uma vez e a lista guarda no máximo
-   HISTORY_LIMIT itens: { productId, versionIndex, viewedAt }.
-   ========================================================================== */
+/**
+ * Histórico: mantém os últimos produtos visitados, sem duplicatas.
+ * A lista é limitada e exibida em cards compactos.
+ */
 
 const HISTORY_LIMIT = 8;
 
@@ -18,12 +15,11 @@ function getHistory() {
     && Number.isFinite(entry.viewedAt));
 }
 
+/** Registro de visitas: move o produto para o início e aplica o limite. */
 function addToHistory(productId, versionIndex) {
-  // Remove a visita anterior do mesmo produto e coloca a nova no início.
   const history = getHistory().filter((entry) => entry.productId !== productId);
   history.unshift({ productId, versionIndex, viewedAt: Date.now() });
 
-  // Enquanto passar do limite, descarta o item mais antigo (fim da lista).
   while (history.length > HISTORY_LIMIT) {
     history.pop();
   }
@@ -35,7 +31,6 @@ function clearHistory() {
   document.dispatchEvent(new CustomEvent('jj:history-change'));
 }
 
-// Converte a data da visita em um texto amigável.
 function describeViewTime(viewedAt) {
   const minutes = Math.floor((Date.now() - viewedAt) / 60000);
 
@@ -59,7 +54,6 @@ function createHistoryItem(entry) {
   const link = makeElement('a', 'recent-item');
   link.href = productUrl(product.id, entry.versionIndex);
 
-  // Miniatura leve (240 x 320) para o card compacto de 64 px.
   const image = makeElement('img');
   image.src = getThumbnail(version);
   image.alt = '';
@@ -78,7 +72,7 @@ function createHistoryItem(entry) {
   return link;
 }
 
-// Mostra a seção "Vistos recentemente". Na página do produto, o atual fica de fora.
+/** Interface: renderiza os itens recentes no DOM. */
 function renderHistory(currentProductId) {
   const section = document.getElementById('recently-viewed');
   const list = document.getElementById('recently-viewed-list');
