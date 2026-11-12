@@ -1,21 +1,15 @@
-/* ==========================================================================
-   data.js — Configuração da loja e catálogo de produtos
-   --------------------------------------------------------------------------
-   Este arquivo só guarda DADOS. Nenhuma tela é montada aqui: as outras
-   partes do site (cards, carrinho, favoritos, busca) leem estas listas.
-   Para cadastrar um produto novo, basta acrescentar um objeto em PRODUCTS.
-   ========================================================================== */
+/**
+ * Dados centrais da loja: configuração, produtos e versões de cor.
+ * O catálogo, os favoritos e o carrinho reutilizam estas informações.
+ */
 
-// Número com DDI e DDD; mensagens são montadas antes de abrir o WhatsApp.
 const STORE_CONFIG = Object.freeze({
   whatsappNumber: '5575999312633',
   instagramUrl: 'https://www.instagram.com/jjstylle_/',
   address: 'R. Comendador Gomes, 483 - Parque Panorama, Feira de Santana - BA, 44091-238'
 });
 
-// Cada modelo aparece uma vez; cada versão representa uma combinação de cores.
-// brand: usada no filtro por marca e na busca.
-// isNew: marca os lançamentos (selo "Novo" e filtro "Novidades").
+/** Catálogo: cada produto reúne marca, imagens e versões disponíveis. */
 const PRODUCTS = [
   {
     id: 'puma-essentials',
@@ -149,7 +143,6 @@ const PRODUCTS = [
       }
     ]
   },
-  // Lançamentos da Parte II do TDE.
   {
     id: 'nike-urban',
     name: 'Conjunto Nike Urban',
@@ -197,12 +190,11 @@ const PRODUCTS = [
   }
 ];
 
-// Procura um produto pelo id. Retorna undefined quando o id não existe.
+/** Consultas auxiliares usadas por todas as páginas. */
 function getProductById(productId) {
   return PRODUCTS.find((product) => product.id === productId);
 }
 
-// Confere se o índice de versão é válido para o produto informado.
 function isValidVersion(product, versionIndex) {
   return Boolean(product)
     && Number.isInteger(versionIndex)
@@ -210,13 +202,10 @@ function isValidVersion(product, versionIndex) {
     && versionIndex < product.versions.length;
 }
 
-// Miniatura (240 x 320) da mesma foto, usada no carrinho e no histórico.
-// Ex.: images/produtos/brt.webp → images/produtos/thumbs/brt.webp
 function getThumbnail(version) {
   return version.image.replace('images/produtos/', 'images/produtos/thumbs/');
 }
 
-// Separa "Verde-oliva e bege" em ["Verde-oliva", "Bege"] para o filtro de cores.
 function getVersionColors(version) {
   return version.description
     .split(' e ')
