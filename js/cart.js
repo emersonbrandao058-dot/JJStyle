@@ -1,15 +1,11 @@
-/* ==========================================================================
-   cart.js — Carrinho de compras
-   --------------------------------------------------------------------------
-   Cada item do carrinho guarda só o necessário para encontrar o produto:
-   { productId: 'nike-urban', versionIndex: 0, quantity: 2 }
-   Nome, imagem e cor são buscados em PRODUCTS na hora de mostrar.
-   Como os preços são sob consulta, o pedido é finalizado pelo WhatsApp.
-   ========================================================================== */
+/**
+ * Carrinho demonstrativo: produtos, versões, quantidades e pedido via WhatsApp.
+ * Os dados são salvos no navegador, sem processamento de pagamentos.
+ */
 
 const CART_MAX_QUANTITY = 99;
 
-// Lê o carrinho e descarta itens inválidos (produto removido, cor inexistente).
+/** Estado do carrinho: valida produtos e recupera os itens salvos. */
 function getCart() {
   const saved = readStorage(STORAGE_KEYS.cart, []);
   const cart = [];
@@ -38,7 +34,6 @@ function saveCart(cart) {
   document.dispatchEvent(new CustomEvent('jj:cart-change'));
 }
 
-// Soma as quantidades de todos os itens.
 function countCartItems(cart) {
   let total = 0;
   for (const item of cart) {
@@ -51,7 +46,6 @@ function findCartLine(cart, productId, versionIndex) {
   return cart.findIndex((item) => item.productId === productId && item.versionIndex === versionIndex);
 }
 
-// Mantém a quantidade entre 1 e o limite permitido.
 function clampQuantity(value) {
   const quantity = Number.parseInt(value, 10);
   if (Number.isNaN(quantity) || quantity < 1) {
@@ -62,6 +56,7 @@ function clampQuantity(value) {
   return quantity;
 }
 
+/** Operações principais: adicionar, alterar quantidade e trocar a cor. */
 function addToCart(productId, versionIndex, quantity) {
   const product = getProductById(productId);
   if (!isValidVersion(product, versionIndex)) return;
@@ -81,7 +76,6 @@ function addToCart(productId, versionIndex, quantity) {
   showToast(`${product.name} (${version.description}) foi adicionado ao carrinho.`, 'Ver carrinho', openCart);
 }
 
-// Altera a quantidade de uma linha conforme a ação recebida.
 function changeCartQuantity(lineIndex, action, typedValue) {
   const cart = getCart();
   const item = cart[lineIndex];
@@ -103,7 +97,6 @@ function changeCartQuantity(lineIndex, action, typedValue) {
   saveCart(cart);
 }
 
-// Troca a cor de um item. Se a nova cor já estiver no carrinho, as linhas são somadas.
 function changeCartVersion(lineIndex, newVersionIndex) {
   const cart = getCart();
   const item = cart[lineIndex];
@@ -120,10 +113,7 @@ function changeCartVersion(lineIndex, newVersionIndex) {
   saveCart(cart);
 }
 
-// Desfazer: devolve ao carrinho ATUAL só as linhas que foram removidas.
-// Não regrava um "retrato" antigo do carrinho, então tudo o que a pessoa fez
-// depois da remoção (novos produtos, quantidades, cores) continua valendo.
-// Se o mesmo produto e cor já voltaram ao carrinho, as quantidades são somadas.
+/** Desfazer seguro: restaura apenas itens removidos no carrinho atual. */
 function restoreCartLines(lines, position) {
   const cart = getCart();
   let insertAt = Math.min(position, cart.length);
@@ -196,7 +186,6 @@ function createCartItem(item, lineIndex) {
   thumbLink.href = detailUrl;
   thumbLink.tabIndex = -1;
   thumbLink.setAttribute('aria-hidden', 'true');
-  // Miniatura leve (240 x 320): o espaço no carrinho tem só 76 px de largura.
   const thumb = makeElement('img');
   thumb.src = getThumbnail(version);
   thumb.alt = '';
@@ -211,7 +200,6 @@ function createCartItem(item, lineIndex) {
   name.href = detailUrl;
   info.append(name);
 
-  // Seleção de cor: lista suspensa quando há mais de uma versão.
   const colorRow = makeElement('div', 'cart-color');
   const colorDot = makeElement('span', 'cart-color-dot');
   colorDot.style.setProperty('--swatch-fill', swatchFill(version));
@@ -234,7 +222,6 @@ function createCartItem(item, lineIndex) {
   }
   info.append(colorRow);
 
-  // Controle de quantidade e remoção.
   const actions = makeElement('div', 'cart-actions');
   const stepper = makeElement('div', 'quantity-stepper');
   const input = makeElement('input', 'quantity-input');
@@ -266,7 +253,6 @@ function createCartItem(item, lineIndex) {
   return row;
 }
 
-// Redesenha o painel inteiro a partir do LocalStorage.
 function renderCart() {
   const list = document.getElementById('cart-items');
   if (!list) return;
@@ -277,7 +263,6 @@ function renderCart() {
   const details = document.getElementById('cart-details');
   const footer = document.getElementById('cart-footer');
 
-  // Guarda qual controle estava com foco para devolvê-lo após redesenhar.
   const focused = document.activeElement;
   const focusAction = focused && list.contains(focused) ? focused.dataset.cartAction : null;
   const focusLine = focusAction ? focused.dataset.line : null;
@@ -316,7 +301,6 @@ function renderCart() {
 /* Mensagem do WhatsApp ---------------------------------------------------- */
 
 function buildCartMessage(cart, customerName, notes) {
-  // No WhatsApp, *texto* fica em negrito e _texto_ em itálico.
   const greeting = customerName ? `Olá, JJ Style! Aqui é ${customerName} 👋` : 'Olá, JJ Style! 👋';
   const lines = [
     greeting,
@@ -372,7 +356,6 @@ function initializeCart() {
   const list = document.getElementById('cart-items');
   if (!list) return;
 
-  // Delegação de eventos: um único ouvinte trata os botões de todas as linhas.
   list.addEventListener('click', (event) => {
     const button = event.target.closest('button[data-cart-action]');
     if (!button) return;
@@ -402,7 +385,6 @@ function initializeCart() {
     }
   });
 
-  // Nome e observações também ficam salvos para a próxima visita.
   const nameField = document.getElementById('cart-name');
   const notesField = document.getElementById('cart-notes');
   const savedOrder = readStorage(STORAGE_KEYS.order, {});
