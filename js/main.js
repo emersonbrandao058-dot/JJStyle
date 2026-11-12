@@ -1,12 +1,7 @@
-/* ==========================================================================
-   main.js — Montagem das páginas e inicialização
-   --------------------------------------------------------------------------
-   Ordem de carregamento (todas com defer, executadas nesta sequência):
-   bootstrap.bundle (local) → data.js → storage.js → ui.js → favorites.js
-   → cart.js → history.js → catalog.js → main.js
-   Este arquivo cria os cards, monta a página do produto, liga o header
-   (favoritos e carrinho) e chama a inicialização de cada funcionalidade.
-   ========================================================================== */
+/**
+ * Integração das páginas: monta cards, detalhe de produto e cabeçalho.
+ * Inicializa os módulos e atualiza a interface a partir dos eventos da loja.
+ */
 
 /* Cards de produto -------------------------------------------------------- */
 
@@ -16,7 +11,6 @@ function selectProductVersion(card, version, selectedButton, number, versionInde
   const contactLink = card.querySelector('.product-whatsapp');
   const productName = card.querySelector('.card-title').textContent;
 
-  // A cor escolhida fica guardada no card para o botão "Adicionar".
   card.dataset.versionIndex = String(versionIndex);
   image.src = version.image;
   image.alt = version.alt;
@@ -60,7 +54,6 @@ function selectProductVersion(card, version, selectedButton, number, versionInde
   });
 }
 
-// Feedback rápido no próprio botão depois de adicionar ao carrinho.
 function showAddedFeedback(button) {
   const label = button.querySelector('.product-add-label');
   window.clearTimeout(Number(button.dataset.feedbackTimer));
@@ -72,7 +65,6 @@ function showAddedFeedback(button) {
   }, 1600));
 }
 
-// priority: 'high' (primeiro card visível), 'eager' (logo abaixo) ou 'lazy' (padrão).
 function createProductCard(product, headingTag, number, initialIndex = 0, priority = 'lazy') {
   const card = makeElement('article', 'card product-card');
   card.dataset.productId = product.id;
@@ -82,7 +74,6 @@ function createProductCard(product, headingTag, number, initialIndex = 0, priori
   const imageLink = makeElement('a', 'product-image-link');
   imageLink.href = productUrl(product.id, initialIndex);
   const image = makeElement('img', 'card-img-top');
-  // Fotos WebP de 800 x 1067 (mesma proporção 3:4 das originais).
   image.width = 800;
   image.height = 1067;
   image.decoding = 'async';
@@ -106,7 +97,6 @@ function createProductCard(product, headingTag, number, initialIndex = 0, priori
   heading.append(nameLink);
   body.append(heading);
 
-  // As amostras aparecem mesmo com uma só cor, para manter os cards alinhados.
   const options = makeElement('div', 'product-options');
   options.setAttribute('role', 'group');
   options.setAttribute('aria-label', `Cores de ${product.name}`);
@@ -153,7 +143,6 @@ function createProductCard(product, headingTag, number, initialIndex = 0, priori
   return card;
 }
 
-// Vitrine da Home: quatro destaques, com os lançamentos primeiro.
 function renderProducts(number) {
   document.querySelectorAll('[data-product-list="home"]').forEach((list) => {
     const featured = getFeaturedProducts(4);
@@ -164,7 +153,6 @@ function renderProducts(number) {
 
 /* Página individual do produto ------------------------------------------- */
 
-// Sugestões: primeiro a mesma marca, depois lançamentos, depois o restante.
 function getRelatedProducts(product, limit) {
   const others = PRODUCTS.filter((item) => item.id !== product.id);
   const score = (item) => {
@@ -197,7 +185,6 @@ function initializeDetailQuantity() {
   update(1);
 }
 
-// Retorna o id do produto exibido (ou null) para o histórico ignorá-lo.
 function renderProductDetail(number) {
   const detail = document.getElementById('product-detail');
   if (!detail) return null;
@@ -213,7 +200,6 @@ function renderProductDetail(number) {
   const requestedVersion = Number(params.get('versao')) - 1;
   let currentIndex = isValidVersion(product, requestedVersion) ? requestedVersion : 0;
   const image = document.getElementById('detail-image');
-  // A foto principal é o maior elemento da página: pede prioridade alta.
   image.fetchPriority = 'high';
   const colorName = document.getElementById('detail-color-name');
   const contactLink = document.getElementById('detail-whatsapp');
@@ -244,7 +230,6 @@ function renderProductDetail(number) {
     options.querySelectorAll('.product-option').forEach((button, buttonIndex) => {
       button.setAttribute('aria-pressed', String(buttonIndex === index));
     });
-    // O histórico lembra a última cor vista deste produto.
     addToHistory(product.id, index);
     if (updateUrl) window.history.replaceState(null, '', productUrl(product.id, index));
   }
@@ -310,7 +295,7 @@ function updateHeaderCounters() {
   }
 }
 
-// Eventos próprios disparados por favorites.js, cart.js e history.js.
+/** Eventos da aplicação: atualizam contadores e sincronizam outras abas. */
 function initializeAppEvents() {
   document.addEventListener('jj:favorites-change', () => {
     updateHeaderCounters();
@@ -321,7 +306,6 @@ function initializeAppEvents() {
     renderCart();
   });
 
-  // O evento "storage" avisa quando outra aba do site alterou o LocalStorage.
   window.addEventListener('storage', (event) => {
     switch (event.key) {
       case STORAGE_KEYS.favorites:
@@ -334,7 +318,6 @@ function initializeAppEvents() {
         document.dispatchEvent(new CustomEvent('jj:history-change'));
         break;
       case null:
-        // localStorage.clear() em outra aba: atualiza tudo.
         document.dispatchEvent(new CustomEvent('jj:favorites-change'));
         document.dispatchEvent(new CustomEvent('jj:cart-change'));
         document.dispatchEvent(new CustomEvent('jj:history-change'));
@@ -359,8 +342,6 @@ function activateSocialLink(link, href, label) {
   link.title = label;
 }
 
-// O Bootstrap vem de vendor/bootstrap/ (cópia local da versão 5.3.8), carregado
-// com defer ANTES dos scripts do site. Assim não há CDN nem download duplicado.
 function initializeBootstrap() {
   if (!window.bootstrap) return;
 
@@ -437,7 +418,6 @@ function initializeInstagram() {
       }
     }
   } catch (_) {
-    // Sem URL oficial, o ícone permanece visível e sem destino.
   }
 }
 
