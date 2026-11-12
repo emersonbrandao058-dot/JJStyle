@@ -1,9 +1,6 @@
-/* ==========================================================================
-   ui.js — Funções auxiliares de interface
-   --------------------------------------------------------------------------
-   Pequenas funções reaproveitadas por cards, carrinho, favoritos e
-   histórico: criar elementos, desenhar ícones SVG e mostrar avisos.
-   ========================================================================== */
+/**
+ * Componentes reutilizáveis da interface: elementos, ícones, cores e avisos.
+ */
 
 function makeElement(tag, className, textContent) {
   const element = document.createElement(tag);
@@ -12,7 +9,6 @@ function makeElement(tag, className, textContent) {
   return element;
 }
 
-// Traçados dos ícones usados pelo JavaScript (viewBox 24 x 24).
 const ICON_PATHS = {
   heart: ['M12 20s-7.5-4.6-7.5-10.4A4.3 4.3 0 0 1 12 6.9a4.3 4.3 0 0 1 7.5 2.7C19.5 15.4 12 20 12 20Z'],
   bag: ['M5.5 8.5h13l-1.1 11.5H6.6L5.5 8.5Z', 'M9 8.5V7a3 3 0 0 1 6 0v1.5'],
@@ -67,7 +63,6 @@ function makeWhatsAppIcon() {
   return icon;
 }
 
-// Amostra de cor: uma cor sólida ou um círculo dividido ao meio.
 function swatchFill(version) {
   if (version.swatch.length === 1) {
     return version.swatch[0];
@@ -86,7 +81,7 @@ function prefersReducedMotion() {
 /* Aviso flutuante (toast) ------------------------------------------------- */
 let toastTimer = null;
 
-// Mostra uma mensagem curta. A ação opcional vira um botão dentro do aviso.
+/** Feedback visual: aviso temporário com ação opcional, como Desfazer. */
 function showToast(message, actionLabel, onAction) {
   const toast = document.getElementById('jj-toast');
   if (!toast) return;
@@ -95,7 +90,6 @@ function showToast(message, actionLabel, onAction) {
   const actionButton = document.getElementById('jj-toast-action');
   const liveRegion = document.getElementById('jj-live');
   text.textContent = message;
-  // Região sempre presente na página: leitores de tela anunciam a mensagem.
   if (liveRegion) liveRegion.textContent = message;
 
   if (actionLabel && onAction) {
@@ -112,17 +106,13 @@ function showToast(message, actionLabel, onAction) {
 
   placeToast(toast);
   toast.hidden = false;
-  // Força o navegador a aplicar o estado inicial antes da transição.
   void toast.offsetWidth;
   toast.classList.add('is-visible');
 
-  // Avisos com botão ficam mais tempo, para dar tempo de usar o teclado.
   toast.dataset.duration = String(actionLabel && onAction ? 8000 : 3800);
   startToastTimer(toast);
 }
 
-// Com o carrinho aberto, o Bootstrap prende o foco do teclado dentro do painel.
-// Por isso o aviso (e o botão "Desfazer") vai para dentro dele enquanto estiver aberto.
 function placeToast(toast) {
   const drawer = document.getElementById('carrinho');
   const host = drawer && drawer.classList.contains('show') ? drawer : document.body;
@@ -136,7 +126,6 @@ function startToastTimer(toast) {
   toastTimer = window.setTimeout(hideToast, Number(toast.dataset.duration) || 3800);
 }
 
-// O relógio do aviso para enquanto o mouse ou o foco do teclado estiverem nele.
 function initializeToast() {
   const toast = document.getElementById('jj-toast');
   if (!toast) return;
@@ -150,7 +139,6 @@ function initializeToast() {
   toast.addEventListener('mouseleave', resume);
   toast.addEventListener('focusout', () => window.setTimeout(resume, 0));
 
-  // Ao fechar o carrinho, o aviso volta para a página.
   const drawer = document.getElementById('carrinho');
   if (drawer) {
     drawer.addEventListener('hide.bs.offcanvas', () => document.body.append(toast));
@@ -167,7 +155,6 @@ function hideToast() {
   }, 250);
 }
 
-// Pequena animação no contador do header quando o número muda.
 function bumpBadge(badge) {
   if (!badge || prefersReducedMotion()) return;
   badge.animate(
