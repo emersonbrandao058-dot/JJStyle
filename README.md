@@ -101,31 +101,26 @@ Os módulos conversam por eventos próprios (`jj:favorites-change`, `jj:cart-cha
 
 Ao ler, os dados são validados: itens de produtos inexistentes ou JSON corrompido são descartados sem quebrar a página.
 
-## Roteiro para a apresentação
+## Principais trechos para apresentar
 
-Onde encontrar cada conceito pedido no TDE. Os números são linhas reais dos arquivos; o teste `tests/check-docs.mjs` confere se cada linha citada contém mesmo aquela estrutura (rode-o depois de editar qualquer `.js`).
+A documentação dentro do código está organizada por **blocos de responsabilidade**, não por linha. Cada arquivo possui uma breve descrição e apenas os pontos centrais têm comentários adicionais.
 
-| Conceito | Exemplos no código |
-| --- | --- |
-| `if / else` | `clampQuantity` (`js/cart.js:57`); `restoreCartLines`, Desfazer (`js/cart.js:133`); `describeViewTime` (`js/history.js:42`); `describeResults` (`js/catalog.js:108`); estado vazio (`js/catalog.js:161`). |
-| `switch / case` | quantidade do carrinho (`js/cart.js:90`); cliques do painel (`js/cart.js:381`); filtros rápidos (`js/catalog.js:31`); ordenação (`js/catalog.js:75`); sincronização entre abas (`js/main.js:326`). |
-| `for` | validação do carrinho (`js/cart.js:20`); mensagem do WhatsApp (`js/cart.js:329`); versões de cor na busca (`js/catalog.js:47`); atualização dos corações (`js/favorites.js:63`). |
-| `while` | limite do histórico (`js/history.js:27`); montagem do histórico (`js/history.js:91`); palavras da busca (`js/catalog.js:57`). |
-| Funções | cada funcionalidade é dividida em funções pequenas: `addToCart` (`js/cart.js:65`), `restoreCartLines` (`js/cart.js:127`), `toggleFavorite` (`js/favorites.js:23`), `addToHistory` (`js/history.js:21`), `applyCatalogFilters` (`js/catalog.js:121`). |
-| Eventos | `input` da busca (`js/catalog.js:292`); `change` dos filtros (`js/catalog.js:316`); delegação de `click` no carrinho (`js/cart.js:376`); `change` da quantidade (`js/cart.js:394`); evento `storage` (`js/main.js:325`). |
-| DOM com `getElementById` | painel do carrinho (`js/cart.js:271`); busca (`js/catalog.js:289`); contadores do header (`js/main.js:300`); histórico (`js/history.js:83`). |
-| LocalStorage | `getItem` (`js/storage.js:29`), `setItem` (`js/storage.js:42`) e `removeItem` (`js/storage.js:54`). |
-| HTML5 / CSS3 / Bootstrap | HTML semântico (`header`, `nav`, `main`, `section`, `footer`) em `index.html`; variáveis e `@media` em `css/style.css`; navbar, carrossel e painel do carrinho (offcanvas) do Bootstrap. |
-| Utilidade no mundo real | catálogo com busca e filtros, carrinho que gera o pedido pronto para o WhatsApp da loja, favoritos e histórico guardados no navegador. |
+| Conceito exigido | Onde demonstrar | Explicação |
+| --- | --- | --- |
+| HTML, CSS e Bootstrap | `index.html`, `produtos.html`, `produto.html`, `css/style.css` | Estrutura semântica, navegação, cards, carrossel, offcanvas e responsividade. |
+| `if / else` | `js/cart.js` — `clampQuantity` e `restoreCartLines` | Validação da quantidade e decisões ao desfazer uma remoção. |
+| `switch / case` | `js/cart.js` — `changeCartQuantity`; `js/catalog.js` — `matchesQuickFilter` | Escolha da ação do carrinho ou do filtro selecionado. |
+| `for` | `js/cart.js` — `getCart` e `buildCartMessage` | Percorre itens do carrinho para validar e montar o pedido. |
+| `while` | `js/history.js` — `addToHistory`; `js/catalog.js` — `findMatchingVersion` | Limita o histórico e percorre palavras da busca. |
+| Funções | `addToCart`, `toggleFavorite`, `applyCatalogFilters`, `addToHistory` | Separam as funcionalidades em partes reutilizáveis. |
+| DOM com `getElementById` | `js/cart.js` — `renderCart`; `js/catalog.js` — `initializeCatalog` | Localiza elementos para atualizar a interface. |
+| Eventos | `js/catalog.js` — `initializeCatalog`; `js/main.js` — `initializeAppEvents` | Reage a digitação, cliques, alterações e sincronização entre abas. |
+| LocalStorage | `js/storage.js` — `readStorage`, `writeStorage`, `removeStorage` | Persiste favoritos, carrinho, histórico e dados do pedido. |
+| Projeto acadêmico | `js/academic.js`, `css/style.css` | Identifica a demonstração e apresenta aviso inicial uma vez por aba. |
 
-### Sugestão de divisão entre 4 integrantes
+### Apresentação individual — Emerson Brandão
 
-Cada integrante mostra o site funcionando e explica um trecho:
-
-1. **HTML, CSS e responsividade:** `index.html` (estrutura, carrossel), `css/style.css` (variáveis, `@media`, banner mobile).
-2. **JavaScript básico:** `js/data.js` (dados e funções de busca), `if / else` e `switch / case` em `js/cart.js` e `js/catalog.js`.
-3. **DOM, eventos e repetição:** busca dinâmica e filtros em `js/catalog.js`, `for` e `while`, `getElementById`, `addEventListener`.
-4. **LocalStorage e utilidade real:** `js/storage.js`, favoritos, histórico, carrinho (inclusive “Desfazer”) e mensagem do WhatsApp.
+A apresentação é individual. Demonstre a Home, o catálogo e a página do produto; depois explique os exemplos de JavaScript acima e finalize com um pedido demonstrativo pelo WhatsApp, sem enviar uma compra real.
 
 ## Testes
 
@@ -135,10 +130,10 @@ Os testes automáticos ficam em `tests/` e usam o Microsoft Edge já instalado (
 cd tests
 npm install
 npm test             # testes de ponta a ponta no navegador
-npm run check-docs   # confere as linhas citadas neste README
+npm run check-docs   # confere as funções citadas neste README
 ```
 
-A suíte abre o site num servidor local temporário e cobre carregamento sem erros de JavaScript e sem 404, Bootstrap e fonte carregados uma única vez e do próprio site, busca, filtros, ordenação, favoritos (incluindo foco do teclado), histórico, carrinho (quantidades, cores, Desfazer, mensagem do WhatsApp), LocalStorage corrompido ou bloqueado, sincronização entre abas, ausência de rolagem horizontal de 320 a 1920 px e o posicionamento do botão do banner no celular. O que é conferido só a olho (aparência dos banners e das páginas) foi inspecionado por capturas de tela e não faz parte da suíte.
+A suíte abre o site num servidor local temporário e cobre carregamento sem erros de JavaScript e sem 404, Bootstrap e fonte carregados uma única vez e do próprio site, busca, filtros, ordenação, favoritos (incluindo foco do teclado), histórico, carrinho (quantidades, cores, Desfazer, mensagem do WhatsApp), LocalStorage corrompido ou bloqueado, sincronização entre abas, ausência de rolagem horizontal de 320 a 1920 px e o posicionamento do botão do banner no celular. O que é conferido apenas visualmente (aparência dos banners e das páginas) foi inspecionado por capturas de tela e não faz parte da suíte.
 
 ## Contatos e configuração
 
@@ -173,7 +168,7 @@ Os recursos da Parte II seguem a mesma linguagem: superfícies escuras, botões 
 ## Entrega do TDE
 
 - GitHub: [emersonbrandao058-dot/JJStyle](https://github.com/emersonbrandao058-dot/JJStyle)
-- Site publicado (Parte I): [jj-style.vercel.app](https://jj-style.vercel.app/)
+- Site publicado (TDE Parte II): [jj-style.vercel.app](https://jj-style.vercel.app/)
 - Design: [Figma da Home](https://www.figma.com/design/SEKixVXDTfooARsFs5MlaC)
 - Páginas: `index.html`, `produtos.html` e `produto.html`.
 - Prazos (Parte II): envio no Google Sala de Aula até 16/11/2026; apresentação em 17/11/2026.
