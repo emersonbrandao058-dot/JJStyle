@@ -1,17 +1,12 @@
-/* ==========================================================================
-   favorites.js — Lista de favoritos
-   --------------------------------------------------------------------------
-   Os favoritos são um array de ids salvo no LocalStorage, por exemplo:
-   ["nike-urban", "brt"]. Qualquer botão com o atributo data-favorite-id
-   é atualizado automaticamente quando a lista muda.
-   ========================================================================== */
+/**
+ * Favoritos: guarda IDs dos produtos e sincroniza os corações da interface.
+ */
 
 function getFavorites() {
   const saved = readStorage(STORAGE_KEYS.favorites, []);
   if (!Array.isArray(saved)) {
     return [];
   }
-  // Ignora ids que não existem mais no catálogo.
   return saved.filter((productId) => getProductById(productId));
 }
 
@@ -19,7 +14,7 @@ function isFavorite(productId) {
   return getFavorites().includes(productId);
 }
 
-// Adiciona ou remove o produto. Retorna true se ele passou a ser favorito.
+/** Regra de negócio: alterna o favorito e notifica os outros módulos. */
 function toggleFavorite(productId) {
   const favorites = getFavorites();
   const position = favorites.indexOf(productId);
@@ -34,12 +29,10 @@ function toggleFavorite(productId) {
   }
 
   writeStorage(STORAGE_KEYS.favorites, favorites);
-  // Evento próprio: header, catálogo e botões escutam e se atualizam.
   document.dispatchEvent(new CustomEvent('jj:favorites-change'));
   return added;
 }
 
-// Desenha um botão de coração como ativo (favorito) ou inativo.
 function paintFavoriteButton(button, active) {
   const product = getProductById(button.dataset.favoriteId);
   button.setAttribute('aria-pressed', String(active));
@@ -55,7 +48,7 @@ function paintFavoriteButton(button, active) {
   }
 }
 
-// Atualiza o estado visual de todos os corações da página.
+/** Interface: reflete a lista salva em todos os botões de favorito. */
 function syncFavoriteButtons() {
   const favorites = getFavorites();
   const buttons = document.querySelectorAll('[data-favorite-id]');
@@ -65,7 +58,6 @@ function syncFavoriteButtons() {
   }
 }
 
-// Cria o botão de coração usado nos cards.
 function createFavoriteButton(product, extraClass) {
   const button = makeElement('button', `favorite-toggle ${extraClass || ''}`.trim());
   button.type = 'button';
