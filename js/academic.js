@@ -1,4 +1,7 @@
-/* Aviso de entrada do projeto acadêmico: apenas uma vez por aba/sessão. */
+/**
+ * Apresentação acadêmica: aviso inicial de demonstração, exibido uma vez por aba.
+ * O visitante pode dispensar a tela ou aguardar o encerramento automático.
+ */
 (() => {
   'use strict';
   const key = 'jjstyle:academic-intro-shown';
@@ -6,7 +9,6 @@
     if (window.sessionStorage.getItem(key) === 'yes') return;
     window.sessionStorage.setItem(key, 'yes');
   } catch (_error) {
-    // Se o sessionStorage estiver indisponível, a demonstração continua acessível.
   }
 
   const intro = document.createElement('div');
