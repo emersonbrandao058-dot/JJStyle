@@ -1,15 +1,8 @@
-/* ==========================================================================
-   storage.js — Acesso ao LocalStorage
-   --------------------------------------------------------------------------
-   O LocalStorage guarda apenas texto. Por isso os dados são convertidos com
-   JSON.stringify ao salvar e JSON.parse ao ler. Tudo fica dentro de
-   try/catch porque o navegador pode bloquear o armazenamento (aba anônima,
-   cookies desativados ou espaço cheio). Se isso acontecer, os dados ficam
-   numa memória temporária: o carrinho e os favoritos continuam funcionando
-   enquanto a página estiver aberta, só não são lembrados na próxima visita.
-   ========================================================================== */
+/**
+ * Persistência da loja: centraliza as chaves e o acesso ao LocalStorage.
+ * Se o armazenamento falhar, os dados continuam disponíveis na sessão atual.
+ */
 
-// O prefixo "jjstyle:" evita conflito com dados de outros sites no mesmo domínio.
 const STORAGE_KEYS = Object.freeze({
   favorites: 'jjstyle:favoritos',
   cart: 'jjstyle:carrinho',
@@ -17,11 +10,10 @@ const STORAGE_KEYS = Object.freeze({
   order: 'jjstyle:pedido'
 });
 
-// Reserva usada somente quando o LocalStorage não está disponível.
 const memoryStorage = new Map();
 
+/** Leitura, gravação e remoção de dados com JSON e tratamento de erros. */
 function readStorage(key, fallbackValue) {
-  // Um valor na memória é mais novo que o do disco: só existe se o salvamento falhou.
   if (memoryStorage.has(key)) {
     return memoryStorage.get(key);
   }
@@ -32,7 +24,6 @@ function readStorage(key, fallbackValue) {
     }
     return JSON.parse(savedText);
   } catch (error) {
-    // JSON inválido ou armazenamento bloqueado: usa o valor padrão.
     return fallbackValue;
   }
 }
@@ -53,6 +44,5 @@ function removeStorage(key) {
   try {
     window.localStorage.removeItem(key);
   } catch (error) {
-    // Nada a fazer: o dado já não está acessível.
   }
 }
