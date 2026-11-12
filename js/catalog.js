@@ -1,11 +1,7 @@
-/* ==========================================================================
-   catalog.js — Busca dinâmica, filtros e ordenação (produtos.html)
-   --------------------------------------------------------------------------
-   O estado dos filtros fica no objeto catalogState. A cada digitação ou
-   mudança de filtro, applyCatalogFilters() percorre PRODUCTS, decide quais
-   produtos aparecem e redesenha a grade. O estado também vai para a URL,
-   então um link como produtos.html?filtro=favoritos abre já filtrado.
-   ========================================================================== */
+/**
+ * Catálogo: busca, filtros, ordenação e sincronização com a URL.
+ * As regras usam a lista PRODUCTS; a interface reage aos eventos do usuário.
+ */
 
 const DEFAULT_CATALOG_STATE = Object.freeze({
   search: '',
@@ -17,7 +13,7 @@ const DEFAULT_CATALOG_STATE = Object.freeze({
 
 const catalogState = { ...DEFAULT_CATALOG_STATE };
 
-// Remove acentos e maiúsculas: "Lilás" e "lilas" passam a ser iguais na busca.
+/** Regras de seleção: normaliza a busca e combina filtros e ordenação. */
 function normalizeText(text) {
   return String(text)
     .normalize('NFD')
@@ -26,7 +22,6 @@ function normalizeText(text) {
     .trim();
 }
 
-// Filtros rápidos (botões Todos, Novidades e Favoritos).
 function matchesQuickFilter(product, quickFilter) {
   switch (quickFilter) {
     case 'novidades':
@@ -39,8 +34,6 @@ function matchesQuickFilter(product, quickFilter) {
   }
 }
 
-// Retorna o índice da primeira cor que combina com a busca e o filtro de cor,
-// ou -1 se nenhuma combinar. Assim o card já abre na cor procurada.
 function findMatchingVersion(product, state) {
   const words = normalizeText(state.search).split(/\s+/).filter(Boolean);
 
@@ -51,7 +44,6 @@ function findMatchingVersion(product, state) {
       `${product.name} ${product.brand} ${version.description} ${product.isNew ? 'novo novidade lancamento' : ''}`
     );
 
-    // Todas as palavras digitadas precisam aparecer no texto do produto.
     let wordsMatch = true;
     let wordIndex = 0;
     while (wordsMatch && wordIndex < words.length) {
@@ -68,7 +60,6 @@ function findMatchingVersion(product, state) {
   return -1;
 }
 
-// Ordena uma cópia da lista, sem alterar PRODUCTS.
 function sortProducts(products, sortOption) {
   const sorted = products.slice();
 
@@ -85,14 +76,12 @@ function sortProducts(products, sortOption) {
       break;
     case 'destaques':
     default:
-      // Lançamentos primeiro; o restante mantém a ordem do cadastro.
       sorted.sort((a, b) => Number(b.product.isNew) - Number(a.product.isNew));
       break;
   }
   return sorted;
 }
 
-// Produtos da vitrine da Home: mesma ordem de "Destaques" do catálogo.
 function getFeaturedProducts(limit) {
   const entries = PRODUCTS.map((product) => ({ product, versionIndex: 0 }));
   return sortProducts(entries, 'destaques').slice(0, limit);
@@ -118,6 +107,7 @@ function describeResults(total) {
   return text;
 }
 
+/** Resultado: aplica os filtros e atualiza os cards exibidos. */
 function applyCatalogFilters() {
   const grid = document.getElementById('catalog-grid');
   if (!grid) return;
@@ -136,7 +126,6 @@ function applyCatalogFilters() {
 
   const sorted = sortProducts(results, catalogState.sort);
   const number = STORE_CONFIG.whatsappNumber.replace(/\D/g, '');
-  // A primeira linha aparece sem rolar: carrega já (a primeira foto com prioridade alta).
   grid.replaceChildren(...sorted.map((entry, index) => {
     let priority = 'lazy';
     if (index === 0) priority = 'high';
@@ -167,7 +156,6 @@ function renderCatalogEmptyState(isEmpty) {
   }
 }
 
-// Mantém campos e botões coerentes com o estado (útil ao abrir por um link).
 function syncCatalogControls() {
   const searchInput = document.getElementById('catalog-search');
   if (searchInput.value !== catalogState.search) {
@@ -185,6 +173,7 @@ function syncCatalogControls() {
   document.getElementById('chip-favorites-count').textContent = favoritesCount > 0 ? String(favoritesCount) : '';
 }
 
+/** Navegação: mantém os filtros na URL para compartilhar a pesquisa. */
 function updateCatalogUrl() {
   const params = new URLSearchParams();
   if (catalogState.search.trim()) params.set('busca', catalogState.search.trim());
@@ -211,7 +200,6 @@ function readCatalogUrl(options) {
   if (['destaques', 'nome-az', 'nome-za', 'marca'].includes(sort)) catalogState.sort = sort;
 }
 
-// Monta as opções de marca e cor a partir dos próprios dados dos produtos.
 function collectFilterOptions() {
   const brands = [];
   const colors = [];
@@ -246,11 +234,6 @@ function resetCatalogFilters() {
   document.getElementById('catalog-search').focus();
 }
 
-// Redesenha a lista de favoritos sem deixar o teclado "perdido".
-// Ao remover um favorito, o card some e o botão que tinha o foco sai da página.
-// Regra previsível: o foco vai para o botão de favorito do card que ocupou o
-// mesmo lugar (o próximo); se era o último, vai para o anterior; se a lista
-// ficou vazia, vai para o título da mensagem de lista vazia.
 function refreshFavoritesViewKeepingFocus() {
   const grid = document.getElementById('catalog-grid');
   const focusedCard = document.activeElement ? document.activeElement.closest('#catalog-grid .product-card') : null;
@@ -277,6 +260,7 @@ function focusCatalogSearchFromHash() {
   }
 }
 
+/** DOM e eventos: conecta busca, botões, selects e atalhos de teclado. */
 function initializeCatalog() {
   const grid = document.getElementById('catalog-grid');
   if (!grid) return;
@@ -288,7 +272,6 @@ function initializeCatalog() {
 
   const searchInput = document.getElementById('catalog-search');
 
-  // Busca dinâmica: filtra a cada letra digitada.
   searchInput.addEventListener('input', () => {
     catalogState.search = searchInput.value;
     applyCatalogFilters();
@@ -329,7 +312,6 @@ function initializeCatalog() {
   document.getElementById('catalog-clear').addEventListener('click', resetCatalogFilters);
   document.getElementById('catalog-empty-clear').addEventListener('click', resetCatalogFilters);
 
-  // Atalho de teclado: "/" leva o cursor para a busca.
   document.addEventListener('keydown', (event) => {
     const typing = event.target.closest('input, textarea, select, [contenteditable="true"]');
     if (event.key === '/' && !typing && !event.ctrlKey && !event.metaKey) {
@@ -338,7 +320,6 @@ function initializeCatalog() {
     }
   });
 
-  // Se o favorito sair enquanto o filtro "Favoritos" está ativo, o card some na hora.
   document.addEventListener('jj:favorites-change', () => {
     if (catalogState.quick === 'favoritos') {
       refreshFavoritesViewKeepingFocus();
@@ -349,8 +330,6 @@ function initializeCatalog() {
 
   window.addEventListener('hashchange', focusCatalogSearchFromHash);
   applyCatalogFilters();
-  // O navegador rola até o #fragmento só depois do carregamento e, nesse momento,
-  // tira o foco do campo. Por isso a busca recebe o foco depois do evento "load".
   if (document.readyState === 'complete') {
     focusCatalogSearchFromHash();
   } else {
